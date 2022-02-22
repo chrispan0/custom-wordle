@@ -51,6 +51,7 @@ hr {
     text-align: center;
     font-stretch:expanded;
     transform: scaleY(.93);
+    user-select: none;
 }
 
 #board {
