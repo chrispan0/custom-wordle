@@ -72,7 +72,7 @@ function createTextElem(row, col, width, borderWidth) {
     p.id = textID(row, col);
     p.classList.add("tileText");
     p.innerText = "";
-    p.style.lineHeight = width - (borderWidth * 2) - (width / 12.5) + "px";
+    p.style.lineHeight = width - (borderWidth * 2) - (width / 17) + "px";
     p.style.fontSize = width / 2 + "px";
     return p;
 }
@@ -224,7 +224,7 @@ let currPos = new position(0, 0, rows, cols);
 
 generateBoard(generateEmptyState(rows, cols));
 
-// Temporary way to check results
+// // Temporary way to check results
 grey(getTile(currPos));
 editText(currPos, "P");
 grey(getTile(currPos.next()));

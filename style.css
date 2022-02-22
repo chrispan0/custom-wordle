@@ -25,9 +25,10 @@ body {
 
 h1 {
     font-family: 'Roboto Slab', 'Jomhuria', Georgia, 'Times New Roman', Times, serif;
-    font-size: 2rem;
+    font-size: 2.3rem;
     text-align: center;
-    margin: 5px;
+    margin-bottom: 3px;
+    transform: scaleX(.8);
 }
 hr {
     border-bottom: none;
@@ -49,6 +50,7 @@ hr {
     font-weight: 900;
     text-align: center;
     font-stretch:expanded;
+    transform: scaleY(.93);
 }
 
 #board {
