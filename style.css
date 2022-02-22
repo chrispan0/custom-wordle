@@ -24,6 +24,8 @@ body {
 }
 
 h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 3rem;
     text-align: center;
     margin: 20px;
 }
@@ -35,8 +37,10 @@ h1 {
 }
 
 .tileText {
+    font-weight: bold;
     text-align: center;
     user-select: none;
+    text-transform: uppercase;
 }
 
 #board {
