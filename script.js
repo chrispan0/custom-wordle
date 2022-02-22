@@ -14,6 +14,7 @@ const yellowColor = "#b59f3b";
 const greyColor = "#3a3a3c";
 const greenColor = "#538d4e";
 const borderColor = "#3a3a3c";
+const borderColorActive = "#565758";
 
 
 // ----------------------------------------------------------------------------- //
@@ -73,7 +74,7 @@ function createTextElem(row, col, width, borderWidth) {
     p.classList.add("tileText");
     p.innerText = "";
     p.style.lineHeight = width - (borderWidth * 2) - (width / 17) + "px";
-    p.style.fontSize = width / 2 + "px";
+    p.style.fontSize = (width / 2) + 1 + "px";
     return p;
 }
 
@@ -88,7 +89,8 @@ function calculateWidth(state) {
 
 // get the width of the board
 function boardWidth() {
-    return board.clientWidth;
+    let width = board.clientWidth;
+    return width;
 }
 
 // ----------------------------------------------------------------------------- //
@@ -187,25 +189,19 @@ class position {
 ////////////////
 
 function green(element) {
-    // const color = "rgb(83, 141, 78)";
     element.style.border = borderWidth + "px solid " + greenColor;
     element.style.backgroundColor = greenColor;
 }
 
 function yellow(element) {
-    // const color = "rgb(181, 159, 59)";
     element.style.border = borderWidth + "px solid " + yellowColor;
     element.style.backgroundColor = yellowColor;
 }
 
 function grey(element) {
-    // const color = "#3a3a3c";
     element.style.border = borderWidth + "px solid " + greyColor;
     element.style.backgroundColor = greyColor;
 }
-// function unhighlight {
-//     element.style.backgroundColor = "grey";
-// }
 
 // ----------------------------------------------------------------------------- //
 
