@@ -1,6 +1,7 @@
 @font-face {
     font-family: 'Clear Sans';
     src: url('ClearSans.ttf') format('truetype');
+    src: url('ClearSans.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -28,22 +29,14 @@ h1 {
 }
 
 .tile {
-    position: relative;
+    display: flexbox;
     display: inline-block;
-    border: 2px solid rgb(51, 51, 51);
     background-color: var(--background);
 }
 
 .tileText {
-    position: absolute;
-    display: block;
-    left: 50%;
-    top: 47.5%;
-    transform: translateX(-50%);
-}
-
-.row {
-    line-height: 0;
+    text-align: center;
+    user-select: none;
 }
 
 #board {

@@ -19,32 +19,34 @@ function generateBoard(state) {    // default is 6x5
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("row");
         for (let col = 0; col < state[row].length; col++) {
-            let div = createDiv(row, col, calculateWidth(state));
+            let div = createDiv(row, col, calculateWidth(state), 2);
             rowDiv.appendChild(div);
         }
         board.appendChild(rowDiv);
     }
 }
 
-function createDiv(row, col, width) {
+function createDiv(row, col, width, borderWidth) {
     let div = document.createElement("div");
     div.id = tileID(row, col);
     div.classList.add("tile");
     div.style.width = width + "px";
     div.style.height = width + "px";
     div.style.margin = gridSpace + "px";
-    // div.style.fontSize = width / 2 + "px";
+    div.style.border = borderWidth + "px solid rgb(51, 51, 51)";
 
-    let p = createTextElem(row, col, width)
+    let p = createTextElem(row, col, width, borderWidth);
     div.appendChild(p);
     return div;
 }
 
-function createTextElem(row, col, width) {
+function createTextElem(row, col, width, borderWidth) {
+    console.log(borderWidth);
     let p = document.createElement("p");
     p.id = textID(row, col);
     p.classList.add("tileText");
     p.innerText = "I";
+    p.style.lineHeight = width - (borderWidth * 2) - (width / 12.5) + "px";
     p.style.fontSize = width / 1.5 + "px";
     return p;
 }
