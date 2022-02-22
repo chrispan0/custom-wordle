@@ -24,22 +24,33 @@ body {
 }
 
 h1 {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Stint Ultra Condensed', 'Jomhuria', Georgia, 'Times New Roman', Times, serif;
+    /* font-weight: normal; */
     font-size: 3rem;
     text-align: center;
-    margin: 20px;
+    margin: 7px;
+}
+hr {
+    border-bottom: none;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
 }
 
 .tile {
-    display: flexbox;
-    display: inline-block;
+    /* display: flex;
+    justify-content: center;
+    align-content: center; */
     background-color: var(--background);
 }
+
 
 .tileText {
     font-weight: bold;
     text-align: center;
-    user-select: none;
     text-transform: uppercase;
 }
 
