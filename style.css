@@ -8,7 +8,7 @@
 }
 
 :root {
-    --background: rgb(17, 17, 17);
+    --background: rgb(18, 18, 19);
 }
 
 * {
@@ -24,14 +24,14 @@ body {
 }
 
 h1 {
-    font-family: 'Stint Ultra Condensed', 'Jomhuria', Georgia, 'Times New Roman', Times, serif;
-    /* font-weight: normal; */
-    font-size: 3rem;
+    font-family: 'Roboto Slab', 'Jomhuria', Georgia, 'Times New Roman', Times, serif;
+    font-size: 2rem;
     text-align: center;
-    margin: 7px;
+    margin: 5px;
 }
 hr {
     border-bottom: none;
+    opacity: 30%;
 }
 
 .row {
@@ -41,17 +41,14 @@ hr {
 }
 
 .tile {
-    /* display: flex;
-    justify-content: center;
-    align-content: center; */
     background-color: var(--background);
 }
 
 
 .tileText {
-    font-weight: bold;
+    font-weight: 900;
     text-align: center;
-    text-transform: uppercase;
+    font-stretch:expanded;
 }
 
 #board {

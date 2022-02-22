@@ -10,6 +10,11 @@
 
 const gridSpace = 2.5; // 5px border between tiles
 const borderWidth = 2;
+const yellowColor = "#b59f3b";
+const greyColor = "#3a3a3c";
+const greenColor = "#538d4e";
+const borderColor = "#3a3a3c";
+
 
 // ----------------------------------------------------------------------------- //
 
@@ -54,7 +59,7 @@ function createDiv(row, col, width, borderWidth) {
     div.style.width = width + "px";
     div.style.height = width + "px";
     div.style.margin = gridSpace + "px";
-    div.style.border = borderWidth + "px solid rgb(51, 51, 51)";
+    div.style.border = borderWidth + "px solid " + borderColor;
 
     let p = createTextElem(row, col, width, borderWidth);
     div.appendChild(p);
@@ -63,13 +68,12 @@ function createDiv(row, col, width, borderWidth) {
 
 // create an empty tileText element
 function createTextElem(row, col, width, borderWidth) {
-    console.log(borderWidth);
     let p = document.createElement("p");
     p.id = textID(row, col);
     p.classList.add("tileText");
     p.innerText = "";
     p.style.lineHeight = width - (borderWidth * 2) - (width / 12.5) + "px";
-    p.style.fontSize = width / 1.5 + "px";
+    p.style.fontSize = width / 2 + "px";
     return p;
 }
 
@@ -106,19 +110,104 @@ function textID(row, col) {
 }
 
 // get a tile element
-function getTile(row, col) {
-    return document.getElementById(tileID(row, col));
+function getTile(position) {
+    return document.getElementById(tileID(position.getRow(), position.getCol()));
 }
 
 // get a tileText element
-function getTileText(row, col) {
-    return document.getElementById(textID(row, col));
+function getTileText(position) {
+    return document.getElementById(textID(position.getRow(), position.getCol()));
 }
 
 // editText -- change the text of a tile at a position
-function editText(row, col, text) {
-    getTileText(row, col).innerText = text;
+function editText(position, text) {
+    getTileText(position).innerText = text;
 }
+
+// ----------------------------------------------------------------------------- //
+
+//////////////////////
+/// POSITION CLASS ///
+//////////////////////
+
+// ----------------------------------------------------------------------------- //
+
+class position {
+    constructor(row, col, rows, cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.row = row;
+        this.col = col;
+    }
+    setRow(row) {
+        this.row = row;
+    }
+    getRow() {
+        return this.row;
+    }
+    setCol(col) {
+        this.col = col;
+    }
+    getCol() {
+        return this.col;
+    }
+    next() {
+        this.col++;
+        if(this.cols <= this.col) {
+            this.col = 0;
+            this.row++;
+        }
+        if(this.rows <= this.row) {
+            this.row = this.rows - 1;
+            this.col = this.cols - 1;
+        }
+        return this;
+    }
+    prev() {
+        this.col--;
+        if(this.col < 0) {
+            this.col = this.cols - 1;
+            this.row--;
+        }
+        if(this.row < 0) {
+            this.row = 0;
+            this.col = 0;
+        }
+        return this;
+    }
+    print() {
+        console.log("Row: " + this.row + ", Col: " + this.col);
+    }
+}
+
+// ----------------------------------------------------------------------------- //
+
+////////////////
+/// GAMEPLAY ///
+////////////////
+
+function green(element) {
+    // const color = "rgb(83, 141, 78)";
+    element.style.border = borderWidth + "px solid " + greenColor;
+    element.style.backgroundColor = greenColor;
+}
+
+function yellow(element) {
+    // const color = "rgb(181, 159, 59)";
+    element.style.border = borderWidth + "px solid " + yellowColor;
+    element.style.backgroundColor = yellowColor;
+}
+
+function grey(element) {
+    // const color = "#3a3a3c";
+    element.style.border = borderWidth + "px solid " + greyColor;
+    element.style.backgroundColor = greyColor;
+}
+// function unhighlight {
+//     element.style.backgroundColor = "grey";
+// }
+
+// ----------------------------------------------------------------------------- //
 
 // ----------------------------------------------------------------------------- //
 
@@ -130,12 +219,60 @@ function editText(row, col, text) {
 
 const rows = 6;
 const cols = 5;
+
+let currPos = new position(0, 0, rows, cols);
+
 generateBoard(generateEmptyState(rows, cols));
 
-editText(0, 0, "W");
-editText(0, 1, "r");
-editText(0, 2, "d");
-editText(0, 3, "l");
-editText(0, 4, "e");
+// Temporary way to check results
+grey(getTile(currPos));
+editText(currPos, "P");
+grey(getTile(currPos.next()));
+editText(currPos, "E");
+yellow(getTile(currPos.next()));
+editText(currPos, "N");
+grey(getTile(currPos.next()));
+editText(currPos, "I");
+grey(getTile(currPos.next()));
+editText(currPos, "S");
+
+green(getTile(currPos.next()));
+editText(currPos, "T");
+yellow(getTile(currPos.next()));
+editText(currPos, "O");
+grey(getTile(currPos.next()));
+editText(currPos, "U");
+grey(getTile(currPos.next()));
+editText(currPos, "G");
+yellow(getTile(currPos.next()));
+editText(currPos, "H");
+
+grey(getTile(currPos.next()));
+editText(currPos, "C");
+green(getTile(currPos.next()));
+editText(currPos, "H");
+grey(getTile(currPos.next()));
+editText(currPos, "A");
+yellow(getTile(currPos.next()));
+editText(currPos, "N");
+yellow(getTile(currPos.next()));
+editText(currPos, "T");
+
+green(getTile(currPos.next()));
+editText(currPos, "T");
+green(getTile(currPos.next()));
+editText(currPos, "H");
+green(getTile(currPos.next()));
+editText(currPos, "O");
+green(getTile(currPos.next()));
+editText(currPos, "R");
+green(getTile(currPos.next()));
+editText(currPos, "N");
+
+
+
+
+
+
 
 
