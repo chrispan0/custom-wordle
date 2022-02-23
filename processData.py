@@ -1,5 +1,7 @@
-file = open('wordlist.txt', 'r')
-writeFile = open('wordlistFormatted.txt','w')
+file = open('answerList.txt', 'r')
+writeFile = open('answers.js','w')
+
+writeFile.write("export { answers };\nconst answers = [\n")
 
 count = 0
 x = 0
@@ -14,10 +16,11 @@ while True:
 
     if(line.strip().isalpha() and line != testLine):
         line = line.upper()
-        writeFile.write((line.strip()) + ':true,')
+        writeFile.write('"' + (line.strip()) +'",')
     else:
         x = x + 1
 print(x)
+writeFile.write("];")
  
 file.close()
 writeFile.close()

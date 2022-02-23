@@ -1,11 +1,14 @@
 //  CUSTOM WORDLE -- by Phineas Ziegler
 
 import { dict } from "./dict.js";
+import { answers } from "./answers.js";
+import Position from "./position.js";
+
 
 // ----------------------------------------------------------------------------- //
 
 /////////////////
-/// CONSTANTS ///
+/// CONSTANTS /// and init
 /////////////////
 
 // ----------------------------------------------------------------------------- //
@@ -23,8 +26,14 @@ let playing = true;     // set false to prevent input
 
 let rows = 6;
 let cols = 5;
-let answer = "Humor";
+const d = new Date();
+let seed = String(d.getFullYear() * d.getMonth() * d.getDate() + (d.getFullYear() * (d.getMonth() + d.getDate())) / d.getDate() + 7);
+console.log(seed);
+let answer = randomWord(seed);
 let state = generateEmptyState(rows, cols);
+let currPos = new Position(0, 0, rows, cols);
+answer = answer.toUpperCase();
+generateBoard(state);
 
 // ----------------------------------------------------------------------------- //
 
@@ -34,12 +43,55 @@ let state = generateEmptyState(rows, cols);
 
 // ----------------------------------------------------------------------------- //
 
+// Generate random word of length n
+// https://stackoverflow.com/a/47593316
+function randomWord(seed) {
+    function xmur3(str) {
+        for (var i = 0, h = 1779033703 ^ str.length; i < str.length; i++) {
+            h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+            h = h << 13 | h >>> 19;
+        } return function () {
+            h = Math.imul(h ^ (h >>> 16), 2246822507);
+            h = Math.imul(h ^ (h >>> 13), 3266489909);
+            return (h ^= h >>> 16) >>> 0;
+        }
+    }
+    function sfc32(a, b, c, d) {
+        return function () {
+            a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
+            var t = (a + b) | 0;
+            a = b ^ b >>> 9;
+            b = c + (c << 3) | 0;
+            c = (c << 21 | c >>> 11);
+            d = d + 1 | 0;
+            t = t + d | 0;
+            c = c + t | 0;
+            return (t >>> 0) / 4294967296;
+        }
+    }
+    // Create xmur3 state:
+    let hash = xmur3(seed);
+    // Output four 32-bit hashes to provide the seed for sfc32.
+    let rand = sfc32(hash(), hash(), hash(), hash());
+
+    let choices = answers.filter(word => word.length == cols);
+    console.log("found " + choices.length + " options.");
+
+    if (choices.length > 0) {
+        let outcome = Math.floor((choices.length + 1) * rand());
+        console.log(choices[outcome]);
+        return choices[outcome];
+    }
+    return -1;
+
+}
+
 // Generates the beginning state
 function generateEmptyState(tries, wordlength) {
     let output = [];
-    for(let r = 0; r < tries; r++) {
+    for (let r = 0; r < tries; r++) {
         let row = [];
-        for(let c = 0; c < wordlength; c++) {
+        for (let c = 0; c < wordlength; c++) {
             row.push(emptyText);
         }
         output.push(row);
@@ -143,78 +195,6 @@ function getText(position) {
 
 // ----------------------------------------------------------------------------- //
 
-//////////////////////
-/// POSITION CLASS ///
-//////////////////////
-
-// ----------------------------------------------------------------------------- //
-
-class Position {
-    constructor(row, col, rows, cols) {
-        this.rows = rows;
-        this.cols = cols;
-        this.row = row;
-        this.col = col;
-    }
-    setRow(row) {
-        this.row = row;
-    }
-    getRow() {
-        return this.row;
-    }
-    setCol(col) {
-        this.col = col;
-    }
-    getCol() {
-        return this.col;
-    }
-    next() {
-        this.col++;
-        if(this.cols <= this.col) {
-            this.col = 0;
-            this.row++;
-        }
-        if(this.rows <= this.row) {
-            this.row = this.rows - 1;
-            this.col = this.cols - 1;
-        }
-        return this;
-    }
-    prev() {
-        this.col--;
-        if(this.col < 0) {
-            this.col = this.cols - 1;
-            this.row--;
-        }
-        if(this.row < 0) {
-            this.row = 0;
-            this.col = 0;
-        }
-        return this;
-    }
-    rowChangeNext() {
-        if(this.getRow() == this.next().getRow()) {
-            this.prev();
-            return false;
-        }
-        this.prev();
-        return true;
-    }
-    rowChangePrev() {
-        if(this.getRow() == this.prev().getRow()) {
-            this.next();
-            return false;
-        }
-        this.next();
-        return true;
-    }
-    print() {
-        console.log("Row: " + this.row + ", Col: " + this.col);
-    }
-}
-
-// ----------------------------------------------------------------------------- //
-
 ////////////////
 /// GAMEPLAY ///
 ////////////////
@@ -235,9 +215,9 @@ function grey(element) {
 }
 
 function colorRow(position, score) {
-    for(let i = 0; i < score.length; i++) {
+    for (let i = 0; i < score.length; i++) {
         let pos = new Position(position.getRow(), i, rows, cols);
-        switch(score[i]) {
+        switch (score[i]) {
             case 0:
                 grey(getTile(pos));
                 break;
@@ -269,7 +249,7 @@ function word(position) {
 }
 
 function checkValid(word) {
-    if(dict[word]) {
+    if (dict[word]) {
         console.log(word + " valid");
         return true;
     }
@@ -278,7 +258,7 @@ function checkValid(word) {
 }
 
 function checkAnswer(word) {
-    if(word == answer) {
+    if (word == answer) {
         endGame(word);
         playing = false;
         return score(word);
@@ -291,13 +271,13 @@ function score(word) {
     let guess = Array.from(word);
     let score = [];     // 0 = not there, 1 = good guess, wrong spot, 2 = correct guess
 
-    for(let i = 0; i < guess.length; i++) {
+    for (let i = 0; i < guess.length; i++) {
         let index = myIndexOf(ans, guess[i], i);
-        if(index == i) {
+        if (index == i) {
             ans[index] = "~";
             score.push(2);
         }
-        else if(index == -1) {
+        else if (index == -1) {
             score.push(0);
         }
         else {
@@ -311,13 +291,13 @@ function score(word) {
 
 // finds the index of the elements occurence that is closest to the start index
 function myIndexOf(array, element, start) {
-    for(let i = start; i >= 0; i--) {
-        if(array[i] == element) {
+    for (let i = start; i >= 0; i--) {
+        if (array[i] == element) {
             return i;
         }
     }
-    for(let i = start + 1; i < array.length; i++) {
-        if(array[i] == element) {
+    for (let i = start + 1; i < array.length; i++) {
+        if (array[i] == element) {
             return i;
         }
     }
@@ -325,7 +305,7 @@ function myIndexOf(array, element, start) {
 }
 
 function endGame(word) {
-    if(word == answer) {
+    if (word == answer) {
         console.log("YOU WIN!");
     }
     else {
@@ -342,11 +322,11 @@ function endGame(word) {
 // ----------------------------------------------------------------------------- //
 
 document.addEventListener("keydown", (e) => {
-    if(!playing) {
+    if (!playing) {
         return;
     }
     let key = e.key;
-    switch(key) {
+    switch (key) {
         case "Backspace":
             handleBackspace();
             break;
@@ -354,27 +334,27 @@ document.addEventListener("keydown", (e) => {
             handleEnter();
             break;
         default:
-            if(new RegExp('^[a-zA-Z]{1}$').test(key)) {
+            if (new RegExp('^[a-zA-Z]{1}$').test(key)) {
                 handleInput(key.toUpperCase());
             }
     }
 })
 
 function handleBackspace() {
-    if(getText(currPos) == emptyText && !currPos.rowChangePrev()) {
+    if (getText(currPos) == emptyText && !currPos.rowChangePrev()) {
         currPos.prev();
     }
-    if(getText(currPos) != emptyText) {
+    if (getText(currPos) != emptyText) {
         editText(currPos, emptyText);
         inactive(getTile(currPos));
     }
 }
 
 function handleEnter() {
-    if(getText(currPos) == emptyText) {
+    if (getText(currPos) == emptyText) {
         return;
     }
-    if(checkValid(word(currPos))) {
+    if (checkValid(word(currPos))) {
         let score = checkAnswer(word(currPos));
         colorRow(currPos, score);
         currPos.next();
@@ -383,11 +363,11 @@ function handleEnter() {
 
 // assumes valid input
 function handleInput(key) {
-    if(getText(currPos) == emptyText) {
+    if (getText(currPos) == emptyText) {
         editText(currPos, key);
         active(getTile(currPos));
     }
-    if(!currPos.rowChangeNext()) {
+    if (!currPos.rowChangeNext()) {
         currPos.next();
     }
 
@@ -398,10 +378,6 @@ function handleInput(key) {
 ///////////////
 
 // ----------------------------------------------------------------------------- //
-
-let currPos = new Position(0, 0, rows, cols);
-generateBoard(state);
-answer = answer.toUpperCase();
 
 
 
