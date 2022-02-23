@@ -36,7 +36,7 @@ h1 {
     /* z-index: 10; */
     top: 0px;
     background-color: var(--background);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .row {
@@ -61,6 +61,6 @@ h1 {
 #board {
     box-sizing: content-box;
     margin: auto;
-    margin-top: 141px;
+    margin-top: 190px;
     width: 335px;
 }

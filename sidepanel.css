@@ -57,7 +57,7 @@ anything not involving this sidepanel. */
     line-height: 1.6rem;
 
     /* Colors */
-    border-right: var(--panelBorderWidth) solid rgba(255, 255, 255, 0.3);
+    border-right: var(--panelBorderWidth) solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(255, 255, 255, 0) 1px 0px 0px;
     background-color: rgb(18, 18, 19);
     overflow-x: hidden;
