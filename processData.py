@@ -22,5 +22,5 @@ print(x)
 file.close()
 writeFile.close()
 
-print("done")
+print("DONE")
 
