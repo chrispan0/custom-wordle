@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,12 +10,73 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap" rel="stylesheet">
     <script src="script.js" type="module" defer></script>
-    <link href="ClearSans.ttf" as="font" type="font/ttf" crossorigin>  <!-- rel="preload" -- was removed from this line -->
+    <link href="ClearSans.ttf" as="font" type="font/ttf" crossorigin>
+    <!-- rel="preload" -- was removed from this line -->
+
+    <link rel="stylesheet" href="sidepanel.css">
+    <script src="https://kit.fontawesome.com/73970ed689.js" crossorigin="anonymous"></script>
+    <script src="sidepanel.js" defer></script>
+
     <title>My Wordle</title>
 </head>
+
 <body>
-    <h1>My Wordle</h1>
-    <hr>
+
     <div id="board"></div>
+
+    <div id="sidepanel">
+        <!-- HEADING 1 -->
+        <h2 class="panelHeader">How to Play</h2>
+        <hr class="panelHR">
+        <p>Each guess must be a valid five-letter word. Hit the enter button to submit.<br>
+            After each guess, the color of the tiles will change to show how close your guess was to the word.
+        </p>
+        <br>
+        <h3>Examples:</h3>
+        <img src="examples.png" alt="">
+        
+        <!-- HEADING 2 -->
+        <h2 class="panelHeader">Disclaimer</h2>
+        <hr class="panelHR">
+        <p class="panelText">
+            I did not invent this game. This site is a clone of the original game, <a
+                class="contentLink" target="_blank"href="https://www.nytimes.com/games/wordle/index.html">Wordle.</a>
+        </p>
+        <p class="panelText">
+            I have recreated the layout and game mechanics from scratch, with the intent of giving the user more control over the game. For example, upcoming changes include the ability to control the length of word you are guessing, and control over the amount of lives the player gets. I also hope to generate custom links which allow you to create a custom wordle game, with a predetermined answer, allowing people to challenge their friends with varying setups.
+        </p>
+
+        <!-- LINKS -->
+        <h2 class="panelHeader">Links/Contact</h2>
+        <hr class="panelHR">
+
+        <!-- repo link -->
+        <p class="panelLink">
+            <i class="fab fa-github"></i> <a href="https://github.com/phinziegler/My-Wordle"
+                target="_blank">Repository</a>
+        </p>
+
+        <!-- email link -->
+        <p class="panelLink">
+            <i class="far fa-envelope"></i> <a href="mailto: phinziegler@gmail.com"
+                target="_blank">phinziegler@gmail.com</a>
+        </p>
+
+        <!-- portfolio link -->
+        <p class="panelLink">
+            <i class="fas fa-folder-open"></i> <a href="https://phinziegler.github.io/Web_Portfolio/"
+                target="_blank">Portfolio</a>
+        </p>
+        <div id="panelFooter">&copy; Phineas Ziegler, 2021</div>
+    </div>
+
+    <div id="intro">
+        <h1>My Wordle</h1>
+    </div>
+
+    <!-- SIDEPANEL BUTTON -->
+    <i id="panelToggle" class="fas fa-chevron-right"></i>
+
 </body>
+
 </html>

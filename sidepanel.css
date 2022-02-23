@@ -1,0 +1,134 @@
+/* Phineas Ziegler, "Easy Sidepanel" */
+
+/* You can use multiple CSS files on a single page.
+Therefore, the easiest way to add this sidebar is 
+likely by adding all of "sidepanel.css" to the
+project, and then using the normal stylesheet for
+anything not involving this sidepanel. */
+
+/* BASIC SETTINGS */
+/* * {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    /* font-family: Arial, Helvetica, sans-serif; */
+/* } */
+
+/* VARIABLES -- Change these settings. */
+:root {
+    --panelAccent: hsl(115, 40%, 50%);
+    --panelWidth: 500px;
+    --panelBorderWidth: 1px;
+    --panelTransition: transform .2s;
+}
+
+/* PANEL OPEN/CLOSE BUTTON */
+#panelToggle {
+    position: fixed;
+    transition: var(--panelTransition);
+    border-radius: 50%;
+
+    /* Position and Size */
+    top: -5px;
+    left: -15px;
+    font-size: 22px;
+    padding: 20px;  /* Controls the "hitbox" size */
+}
+#panelToggle:hover {
+    color: var(--panelAccent);
+}
+
+/* SIDEPANEL */
+#sidepanel {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+
+    position: fixed;
+    top: 40px;
+    left: calc(-1 * var(--panelWidth));
+    width: var(--panelWidth);
+    transition: var(--panelTransition);
+    overflow-y: scroll;
+    height: calc(100vh - 40px);
+
+    /* Text and spacing options */
+    padding: 0px 30px 0 30px;
+    line-height: 1.6rem;
+
+    /* Colors */
+    border-right: var(--panelBorderWidth) solid rgba(255, 255, 255, 0.3);
+    box-shadow: rgba(255, 255, 255, 0) 1px 0px 0px;
+    background-color: rgb(18, 18, 19);
+    overflow-x: hidden;
+}
+/* hide scrollbar */
+#sidepanel::-webkit-scrollbar {
+    width: 0;
+}
+/* used by javascript to move the menu */
+.openPanel {
+    transform: translate(calc(var(--panelWidth) - var(--panelBorderWidth)));
+}
+.openPanel2 {
+    transform: translate(470px);
+}
+
+/* PANEL COMPONENTS */
+.panelHeader {
+    text-align: center;
+    margin-top: 35px;
+    font-size: 1.6rem;
+}
+.panelText {
+    margin-top: 10px;
+}
+.panelHR {
+    margin-top: 15px;
+    margin-bottom: 25px;
+
+    border: 1px solid rgb(255, 255, 255);
+    opacity: 20%;
+}
+
+/* PANEL LINKS */
+.panelLink {
+    text-align: left;
+    color: var(--panelAccent);
+
+    margin-left: 30px;
+    margin-bottom: 5px;
+
+}
+.panelLink>a {
+    color: inherit;
+    text-decoration: none;
+}
+.panelLink>a:hover {
+    text-decoration: underline;
+}
+
+/* PANEL FOOTER -- NOTE: this will need to be adjusted depending on overflow */
+#panelFooter {
+    position: relative;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 0px;
+    
+    margin-top: 100px;
+
+    width: 300px;
+    padding: 8px 0px 8px 0px;
+    border-radius: 20px 20px 0 0;
+
+    text-align: center;
+    background-color: rgb(37, 37, 37);
+}
+
+.contentLink {
+    text-decoration: none;
+    color: var(--panelAccent);
+}
+.contentLink:hover {
+    text-decoration: underline;
+}

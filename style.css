@@ -30,9 +30,13 @@ h1 {
     margin-bottom: 3px;
     transform: scaleX(.8);
 }
-hr {
-    border-bottom: none;
-    opacity: 30%;
+#intro {
+    position: fixed;
+    width: 100%;
+    /* z-index: 10; */
+    top: 0px;
+    background-color: var(--background);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .row {
