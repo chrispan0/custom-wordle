@@ -19,9 +19,11 @@ const borderColor = "#3a3a3c";
 const borderColorActive = "#565758";
 const emptyText = "";
 
-const rows = 6;
-const cols = 5;
+let playing = true;     // set false to prevent input
 
+let rows = 6;
+let cols = 5;
+let answer = "Humor";
 let state = generateEmptyState(rows, cols);
 
 // ----------------------------------------------------------------------------- //
@@ -147,7 +149,7 @@ function getText(position) {
 
 // ----------------------------------------------------------------------------- //
 
-class position {
+class Position {
     constructor(row, col, rows, cols) {
         this.rows = rows;
         this.cols = cols;
@@ -232,6 +234,23 @@ function grey(element) {
     element.style.backgroundColor = greyColor;
 }
 
+function colorRow(position, score) {
+    for(let i = 0; i < score.length; i++) {
+        let pos = new Position(position.getRow(), i, rows, cols);
+        switch(score[i]) {
+            case 0:
+                grey(getTile(pos));
+                break;
+            case 1:
+                yellow(getTile(pos));
+                break;
+            case 2:
+                green(getTile(pos));
+                break;
+        }
+    }
+}
+
 function active(element) {
     element.style.border = borderWidth + "px solid " + borderColorActive;
 }
@@ -242,7 +261,6 @@ function inactive(element) {
 
 function updateState(position, key) {
     state[position.getRow()][position.getCol()] = key;
-    // console.log(JSON.stringify(state));
 }
 
 function word(position) {
@@ -255,7 +273,64 @@ function checkValid(word) {
         console.log(word + " valid");
         return true;
     }
+    console.log(word + " invalid");
     return false;
+}
+
+function checkAnswer(word) {
+    if(word == answer) {
+        endGame(word);
+        playing = false;
+        return score(word);
+    }
+    return score(word);
+}
+
+function score(word) {
+    let ans = Array.from(answer);
+    let guess = Array.from(word);
+    let score = [];     // 0 = not there, 1 = good guess, wrong spot, 2 = correct guess
+
+    for(let i = 0; i < guess.length; i++) {
+        let index = myIndexOf(ans, guess[i], i);
+        if(index == i) {
+            ans[index] = "~";
+            score.push(2);
+        }
+        else if(index == -1) {
+            score.push(0);
+        }
+        else {
+            ans[index] = "~";
+            score.push(1);
+        }
+    }
+    console.log(JSON.stringify(score));
+    return score;
+}
+
+// finds the index of the elements occurence that is closest to the start index
+function myIndexOf(array, element, start) {
+    for(let i = start; i >= 0; i--) {
+        if(array[i] == element) {
+            return i;
+        }
+    }
+    for(let i = start + 1; i < array.length; i++) {
+        if(array[i] == element) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function endGame(word) {
+    if(word == answer) {
+        console.log("YOU WIN!");
+    }
+    else {
+        console.log("YOU LOSE!");
+    }
 }
 
 // ----------------------------------------------------------------------------- //
@@ -267,6 +342,9 @@ function checkValid(word) {
 // ----------------------------------------------------------------------------- //
 
 document.addEventListener("keydown", (e) => {
+    if(!playing) {
+        return;
+    }
     let key = e.key;
     switch(key) {
         case "Backspace":
@@ -293,7 +371,12 @@ function handleBackspace() {
 }
 
 function handleEnter() {
-    if(currPos.rowChangeNext() && checkValid(word(currPos))) {
+    if(getText(currPos) == emptyText) {
+        return;
+    }
+    if(checkValid(word(currPos))) {
+        let score = checkAnswer(word(currPos));
+        colorRow(currPos, score);
         currPos.next();
     }
 }
@@ -316,9 +399,9 @@ function handleInput(key) {
 
 // ----------------------------------------------------------------------------- //
 
-let currPos = new position(0, 0, rows, cols);
+let currPos = new Position(0, 0, rows, cols);
 generateBoard(state);
-
+answer = answer.toUpperCase();
 
 
 
