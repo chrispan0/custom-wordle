@@ -15,6 +15,12 @@ const greyColor = "#3a3a3c";
 const greenColor = "#538d4e";
 const borderColor = "#3a3a3c";
 const borderColorActive = "#565758";
+const emptyText = "";
+
+const rows = 6;
+const cols = 5;
+
+let state = generateEmptyState(rows, cols);
 
 
 // ----------------------------------------------------------------------------- //
@@ -31,7 +37,7 @@ function generateEmptyState(tries, wordlength) {
     for(let r = 0; r < tries; r++) {
         let row = [];
         for(let c = 0; c < wordlength; c++) {
-            row.push(" ");
+            row.push(emptyText);
         }
         output.push(row);
     }
@@ -60,7 +66,7 @@ function createDiv(row, col, width, borderWidth) {
     div.style.width = width + "px";
     div.style.height = width + "px";
     div.style.margin = gridSpace + "px";
-    div.style.border = borderWidth + "px solid " + borderColor;
+    inactive(div);
 
     let p = createTextElem(row, col, width, borderWidth);
     div.appendChild(p);
@@ -72,7 +78,7 @@ function createTextElem(row, col, width, borderWidth) {
     let p = document.createElement("p");
     p.id = textID(row, col);
     p.classList.add("tileText");
-    p.innerText = "";
+    p.innerText = emptyText;
     p.style.lineHeight = width - (borderWidth * 2) - (width / 17) + "px";
     p.style.fontSize = (width / 2) + 1 + "px";
     return p;
@@ -124,6 +130,12 @@ function getTileText(position) {
 // editText -- change the text of a tile at a position
 function editText(position, text) {
     getTileText(position).innerText = text;
+    updateState(position, text);
+}
+
+// get the text of a text tile
+function getText(position) {
+    return getTileText(position).innerText;
 }
 
 // ----------------------------------------------------------------------------- //
@@ -177,6 +189,22 @@ class position {
         }
         return this;
     }
+    rowChangeNext() {
+        if(this.getRow() == this.next().getRow()) {
+            this.prev();
+            return false;
+        }
+        this.prev();
+        return true;
+    }
+    rowChangePrev() {
+        if(this.getRow() == this.prev().getRow()) {
+            this.next();
+            return false;
+        }
+        this.next();
+        return true;
+    }
     print() {
         console.log("Row: " + this.row + ", Col: " + this.col);
     }
@@ -203,9 +231,76 @@ function grey(element) {
     element.style.backgroundColor = greyColor;
 }
 
-// ----------------------------------------------------------------------------- //
+function active(element) {
+    element.style.border = borderWidth + "px solid " + borderColorActive;
+}
+
+function inactive(element) {
+    element.style.border = borderWidth + "px solid " + borderColor;
+}
+
+function updateState(position, key) {
+    state[position.getRow()][position.getCol()] = key;
+    // console.log(JSON.stringify(state));
+}
+
+function word(position) {
+    let word = state[position.getRow()].join("");
+    console.log(word);
+    return word;
+}
 
 // ----------------------------------------------------------------------------- //
+
+///////////////////////
+/// EVENT HANDLING ////
+///////////////////////
+
+// ----------------------------------------------------------------------------- //
+
+document.addEventListener("keydown", (e) => {
+    let key = e.key;
+    switch(key) {
+        case "Backspace":
+            handleBackspace();
+            break;
+        case "Enter":
+            handleEnter();
+            break;
+        default:
+            if(new RegExp('^[a-zA-Z]{1}$').test(key)) {
+                handleInput(key.toUpperCase());
+            }
+    }
+})
+
+function handleBackspace() {
+    if(getText(currPos) == emptyText && !currPos.rowChangePrev()) {
+        currPos.prev();
+    }
+    if(getText(currPos) != emptyText) {
+        editText(currPos, emptyText);
+        inactive(getTile(currPos));
+    }
+}
+
+function handleEnter() {
+    if(currPos.rowChangeNext() && checkValid(word(currPos))) {
+        currPos.next();
+    }
+}
+
+// assumes valid input
+function handleInput(key) {
+    if(getText(currPos) == emptyText) {
+        editText(currPos, key);
+        active(getTile(currPos));
+    }
+    if(!currPos.rowChangeNext()) {
+        currPos.next();
+    }
+
+}
 
 ///////////////
 /// RUNTIME ///
@@ -213,57 +308,54 @@ function grey(element) {
 
 // ----------------------------------------------------------------------------- //
 
-const rows = 6;
-const cols = 5;
-
 let currPos = new position(0, 0, rows, cols);
 
-generateBoard(generateEmptyState(rows, cols));
+generateBoard(state);
 
 // // Temporary way to check results
-grey(getTile(currPos));
-editText(currPos, "P");
-grey(getTile(currPos.next()));
-editText(currPos, "E");
-yellow(getTile(currPos.next()));
-editText(currPos, "N");
-grey(getTile(currPos.next()));
-editText(currPos, "I");
-grey(getTile(currPos.next()));
-editText(currPos, "S");
+// grey(getTile(currPos));
+// editText(currPos, "P");
+// grey(getTile(currPos.next()));
+// editText(currPos, "E");
+// yellow(getTile(currPos.next()));
+// editText(currPos, "N");
+// grey(getTile(currPos.next()));
+// editText(currPos, "I");
+// grey(getTile(currPos.next()));
+// editText(currPos, "S");
 
-green(getTile(currPos.next()));
-editText(currPos, "T");
-yellow(getTile(currPos.next()));
-editText(currPos, "O");
-grey(getTile(currPos.next()));
-editText(currPos, "U");
-grey(getTile(currPos.next()));
-editText(currPos, "G");
-yellow(getTile(currPos.next()));
-editText(currPos, "H");
+// green(getTile(currPos.next()));
+// editText(currPos, "T");
+// yellow(getTile(currPos.next()));
+// editText(currPos, "O");
+// grey(getTile(currPos.next()));
+// editText(currPos, "U");
+// grey(getTile(currPos.next()));
+// editText(currPos, "G");
+// yellow(getTile(currPos.next()));
+// editText(currPos, "H");
 
-grey(getTile(currPos.next()));
-editText(currPos, "C");
-green(getTile(currPos.next()));
-editText(currPos, "H");
-grey(getTile(currPos.next()));
-editText(currPos, "A");
-yellow(getTile(currPos.next()));
-editText(currPos, "N");
-yellow(getTile(currPos.next()));
-editText(currPos, "T");
+// grey(getTile(currPos.next()));
+// editText(currPos, "C");
+// green(getTile(currPos.next()));
+// editText(currPos, "H");
+// grey(getTile(currPos.next()));
+// editText(currPos, "A");
+// yellow(getTile(currPos.next()));
+// editText(currPos, "N");
+// yellow(getTile(currPos.next()));
+// editText(currPos, "T");
 
-green(getTile(currPos.next()));
-editText(currPos, "T");
-green(getTile(currPos.next()));
-editText(currPos, "H");
-green(getTile(currPos.next()));
-editText(currPos, "O");
-green(getTile(currPos.next()));
-editText(currPos, "R");
-green(getTile(currPos.next()));
-editText(currPos, "N");
+// green(getTile(currPos.next()));
+// editText(currPos, "T");
+// green(getTile(currPos.next()));
+// editText(currPos, "H");
+// green(getTile(currPos.next()));
+// editText(currPos, "O");
+// green(getTile(currPos.next()));
+// editText(currPos, "R");
+// green(getTile(currPos.next()));
+// editText(currPos, "N");
 
 
 
