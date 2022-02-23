@@ -1,5 +1,7 @@
 //  CUSTOM WORDLE -- by Phineas Ziegler
 
+import { dict } from "./dict.js";
+
 // ----------------------------------------------------------------------------- //
 
 /////////////////
@@ -21,7 +23,6 @@ const rows = 6;
 const cols = 5;
 
 let state = generateEmptyState(rows, cols);
-
 
 // ----------------------------------------------------------------------------- //
 
@@ -246,8 +247,15 @@ function updateState(position, key) {
 
 function word(position) {
     let word = state[position.getRow()].join("");
-    console.log(word);
     return word;
+}
+
+function checkValid(word) {
+    if(dict[word]) {
+        console.log(word + " valid");
+        return true;
+    }
+    return false;
 }
 
 // ----------------------------------------------------------------------------- //
@@ -309,57 +317,7 @@ function handleInput(key) {
 // ----------------------------------------------------------------------------- //
 
 let currPos = new position(0, 0, rows, cols);
-
 generateBoard(state);
-
-// // Temporary way to check results
-// grey(getTile(currPos));
-// editText(currPos, "P");
-// grey(getTile(currPos.next()));
-// editText(currPos, "E");
-// yellow(getTile(currPos.next()));
-// editText(currPos, "N");
-// grey(getTile(currPos.next()));
-// editText(currPos, "I");
-// grey(getTile(currPos.next()));
-// editText(currPos, "S");
-
-// green(getTile(currPos.next()));
-// editText(currPos, "T");
-// yellow(getTile(currPos.next()));
-// editText(currPos, "O");
-// grey(getTile(currPos.next()));
-// editText(currPos, "U");
-// grey(getTile(currPos.next()));
-// editText(currPos, "G");
-// yellow(getTile(currPos.next()));
-// editText(currPos, "H");
-
-// grey(getTile(currPos.next()));
-// editText(currPos, "C");
-// green(getTile(currPos.next()));
-// editText(currPos, "H");
-// grey(getTile(currPos.next()));
-// editText(currPos, "A");
-// yellow(getTile(currPos.next()));
-// editText(currPos, "N");
-// yellow(getTile(currPos.next()));
-// editText(currPos, "T");
-
-// green(getTile(currPos.next()));
-// editText(currPos, "T");
-// green(getTile(currPos.next()));
-// editText(currPos, "H");
-// green(getTile(currPos.next()));
-// editText(currPos, "O");
-// green(getTile(currPos.next()));
-// editText(currPos, "R");
-// green(getTile(currPos.next()));
-// editText(currPos, "N");
-
-
-
-
 
 
 
