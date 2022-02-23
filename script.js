@@ -22,18 +22,35 @@ const borderColor = "#3a3a3c";
 const borderColorActive = "#565758";
 const emptyText = "";
 
-let playing = true;     // set false to prevent input
+let typing;     // set false to prevent input
+let ended;
+let rows;
+let cols;
+let answer;
+let state;
+let currPos;
 
-let rows = 6;
-let cols = 5;
+let activeRows = [];
+
 const d = new Date();
-let seed = String(d.getFullYear() * d.getMonth() * d.getDate() + (d.getFullYear() * (d.getMonth() + d.getDate())) / d.getDate() + 7);
-console.log(seed);
-let answer = randomWord(seed);
-let state = generateEmptyState(rows, cols);
-let currPos = new Position(0, 0, rows, cols);
-answer = answer.toUpperCase();
-generateBoard(state);
+let seed = String((d.getMonth() + 1) + "/" + String(d.getDate() + "/" + String(d.getFullYear())));
+document.getElementById("seed").value = seed;
+
+function init() {
+    seed = document.getElementById("seed").value;
+    activeRows.forEach(e => e.remove());
+
+    typing = true;     // set false to prevent input
+    ended = false;
+    rows = Math.round(parseFloat(document.getElementById("tries").value));
+    cols = Math.round(parseFloat(document.getElementById("length").value));
+    
+    answer = randomWord(seed).toUpperCase();
+    state = generateEmptyState(rows, cols);
+    currPos = new Position(0, 0, rows, cols);
+    generateBoard(state);
+}
+
 
 // ----------------------------------------------------------------------------- //
 
@@ -75,11 +92,11 @@ function randomWord(seed) {
     let rand = sfc32(hash(), hash(), hash(), hash());
 
     let choices = answers.filter(word => word.length == cols);
-    console.log("found " + choices.length + " options.");
+    console.log("found " + choices.length + " options for word length " + cols + ".");
 
     if (choices.length > 0) {
         let outcome = Math.floor((choices.length + 1) * rand());
-        console.log(choices[outcome]);
+        // console.log(choices[outcome]);
         return choices[outcome];
     }
     return -1;
@@ -102,12 +119,15 @@ function generateEmptyState(tries, wordlength) {
 // creates the board and tiles
 function generateBoard(state) {    // default is 6x5
     let board = document.getElementById("board");
+    board.style.width = ((cols * 335) / 5) + "px";
+    
     for (let row = 0; row < state.length; row++) {
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("row");
         for (let col = 0; col < state[row].length; col++) {
             let div = createDiv(row, col, calculateWidth(state), borderWidth);
             rowDiv.appendChild(div);
+            activeRows.push(rowDiv);
         }
         board.appendChild(rowDiv);
     }
@@ -260,7 +280,6 @@ function checkValid(word) {
 function checkAnswer(word) {
     if (word == answer) {
         endGame(word);
-        playing = false;
         return score(word);
     }
     return score(word);
@@ -304,11 +323,19 @@ function myIndexOf(array, element, start) {
     return -1;
 }
 
+function checkIfEnded() {
+    if(currPos.getRow() == rows - 1 && currPos.getCol() == cols-1) {
+        endGame(word(currPos));
+    }
+}
+
 function endGame(word) {
     if (word == answer) {
+        ended = true;
         console.log("YOU WIN!");
     }
     else {
+        ended = true;
         console.log("YOU LOSE!");
     }
 }
@@ -322,7 +349,7 @@ function endGame(word) {
 // ----------------------------------------------------------------------------- //
 
 document.addEventListener("keydown", (e) => {
-    if (!playing) {
+    if (!typing || ended) {
         return;
     }
     let key = e.key;
@@ -338,7 +365,18 @@ document.addEventListener("keydown", (e) => {
                 handleInput(key.toUpperCase());
             }
     }
-})
+});
+
+Array.from(document.querySelectorAll("ul > label > input")).forEach(e => e.addEventListener("focus", () => {
+    typing = false;
+}));
+Array.from(document.querySelectorAll("ul > label > input")).forEach(e => e.addEventListener("focusout", () => {
+    typing = true;
+}));
+
+document.getElementById("generate").addEventListener("click", () => {
+    init();
+});
 
 function handleBackspace() {
     if (getText(currPos) == emptyText && !currPos.rowChangePrev()) {
@@ -357,6 +395,7 @@ function handleEnter() {
     if (checkValid(word(currPos))) {
         let score = checkAnswer(word(currPos));
         colorRow(currPos, score);
+        checkIfEnded();
         currPos.next();
     }
 }
@@ -379,5 +418,5 @@ function handleInput(key) {
 
 // ----------------------------------------------------------------------------- //
 
-
+init();
 

@@ -132,3 +132,37 @@ anything not involving this sidepanel. */
 .contentLink:hover {
     text-decoration: underline;
 }
+ul {
+    width: fit-content;
+    margin: auto;
+}
+
+ul > label {
+    line-height: 2.1rem;
+    margin: 0px 0 20px 0;
+    display: block;
+    font-size: 1.2rem;
+}
+
+ul > label > input {
+    font-family: monospace;
+    padding: 5px 20px 5px 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+}
+
+label[for="generate"] {
+    text-align: right;
+}
+#generate {
+    padding: 5px 20px 5px 20px;
+    text-align: right;
+    line-height: 2rem;
+    transition: color .1s, background-color .1s;
+}
+#generate:hover {
+    background-color: var(--panelAccent);
+    color: white;
+    border: none;
+}

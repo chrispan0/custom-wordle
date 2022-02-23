@@ -19,7 +19,7 @@
 
 body {
     color: white;
-    font-family: 'Clear Sans';
+    font-family: 'Clear Sans', Arial, Helvetica, sans-serif;
     background-color: var(--background);
 }
 
@@ -62,5 +62,6 @@ h1 {
     box-sizing: content-box;
     margin: auto;
     margin-top: 190px;
+    margin-bottom: 190px;
     width: 335px;
 }
