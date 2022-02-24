@@ -1,7 +1,8 @@
 @font-face {
     font-family: 'Clear Sans';
-    src: url('ClearSans.ttf') format('truetype');
-    src: url('ClearSans.woff') format('woff');
+    src:    
+        url('/assets/ClearSans.ttf') format('truetype'),
+        url('/assets/ClearSans.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

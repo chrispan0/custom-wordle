@@ -5,17 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap" rel="stylesheet">
-    <script src="script.js" type="module" defer></script>
-    <link href="ClearSans.ttf" as="font" type="font/ttf" crossorigin>
+    <!-- <link href="/assets/ClearSans.ttf" as="font" type="font/ttf" crossorigin> -->
+    <!-- <link href="/assets/ClearSans.woff" as="font" type="font/woff" crossorigin> -->
+    
     <!-- rel="preload" -- was removed from this line -->
-
-    <link rel="stylesheet" href="sidepanel.css">
+    
+    <link rel="stylesheet" href="/styles/sidepanel.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    
     <script src="https://kit.fontawesome.com/73970ed689.js" crossorigin="anonymous"></script>
-    <script src="sidepanel.js" defer></script>
+    <script src="/src/script.js" type="module" defer></script>
+    <script src="src/sidepanel.js" defer></script>
 
     <title>My Wordle</title>
 </head>
@@ -25,7 +29,6 @@
     <div id="board"></div>
 
     <!-- Keyboard created by Ciaran Whitney => https://github.com/CEWhitney -->
-    <div id="block"></div>
     <div id="keyboard">
         <div class="keyboardrow">
             <div class="letter">Q</div>
@@ -101,7 +104,7 @@
         </p>
         <br>
         <h3>Examples:</h3>
-        <img src="examples.png" alt="">
+        <img src="/assets/examples.png" alt="picture showing examples of how the screen looks when letters are typed.">
 
         <!-- HEADING 2 -->
         <h2 class="panelHeader">Disclaimer</h2>
