@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/style.css">
     
     <script src="https://kit.fontawesome.com/73970ed689.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script type="module" src="src/script.js" defer></script>
     <script type="module" src="src/sidepanel.js" defer></script>
 
@@ -93,6 +94,24 @@
         </ul>
 
         <br>
+
+        <h2 class="panelHeader">Custom Challenge</h2>
+        <hr class="panelHR">
+
+        <ul>
+            <label for="customWord">Word<br>
+                <input id="customWord" type="text" placeholder="Wordle">
+            </label>
+
+            <label for="customTries">Tries:<br>
+                <input id="customTries" type="number" min="1" value="6">
+            </label>
+
+            <label for="generateID">
+                <input id="generateID" type="submit" value="Copy Link">
+            </label>
+            
+        </ul>
 
         <!-- HEADING 1 -->
         <h2 class="panelHeader">How to Play</h2>

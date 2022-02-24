@@ -152,17 +152,23 @@ ul > label > input {
     border-radius: 5px;
 }
 
-label[for="generate"] {
+label[for="generate"], label[for="generateID"], label[for="Copy"] {
     text-align: right;
 }
-#generate {
+#generate, #generateID, #Copy {
     padding: 5px 20px 5px 20px;
     text-align: right;
     line-height: 2rem;
     transition: color .1s, background-color .1s;
 }
-#generate:hover {
+#generate:hover, #generateID:hover, #Copy:hover {
     background-color: var(--panelAccent);
     color: white;
     border: none;
+}
+#customID {
+    border: 3px solid #BEBEBE;
+    float:left;
+    width: 160px;
+    height: 40px;
 }

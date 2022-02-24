@@ -52,10 +52,34 @@ function init() {
 
     typing = true;     // set false to prevent input
     ended = false;
+
+    const urlParams = new URLSearchParams(window.location.search)
+
+    if (urlParams.has('e')) {
+        let decrypted = urlParams.get('e');
+
+        decrypted = decrypted.replaceAll('flM667', '&');
+        decrypted = decrypted.toString().replaceAll('ll1994n', '+');
+        decrypted = decrypted.toString().replaceAll('jf0901DD', '/');
+
+        decrypted = CryptoJS.AES.decrypt(decrypted, "wordle");
+        decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+        console.log(decrypted);
+
+        answer = decrypted.split('_')[0].toUpperCase();
+        rows = decrypted.split('_')[1];
+        cols = answer.length;
+
+        answers.push(answer);
+        dict[answer] = true;
+
+    } else {
+
     rows = Math.round(parseFloat(document.getElementById("tries").value));
     cols = Math.round(parseFloat(document.getElementById("length").value));
     
     answer = randomWord(seed).toUpperCase();
+    }
     state = generateEmptyState(rows, cols);
     currPos = new Position(0, 0, rows, cols);
     generateBoard(state);
@@ -439,6 +463,20 @@ Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener
     }
     handleInput(e.innerText.toUpperCase());
 }));
+
+document.getElementById("generateID").addEventListener("click", () => {
+    var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
+
+    var encrypted = CryptoJS.AES.encrypt(input, "wordle");
+
+    encrypted = encrypted.toString().replaceAll('&', 'flM667');
+    encrypted = encrypted.toString().replaceAll('+', 'll1994n');
+    encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
+
+    var str =  window.location.href + "?e=" + encrypted;
+
+   navigator.clipboard.writeText(str);
+});
 
 
 // ----------------------------------------------------------------------------- //
