@@ -67,6 +67,12 @@ h1 {
 }
 
 #keyboard {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
     margin: auto;
     width: 50%;
     min-width: 420px;
@@ -95,18 +101,14 @@ h1 {
     font-weight: bold;
 }
 
-#spacer {
-    width: 20px;
-}
-
 .keyboardrow {
+    width: 100%;
     display: flex;
     margin: 0 auto 8px auto;
 }
 
 #keyboardMid {
-    margin-left: 20px;
-    margin-right: 20px;
+    width: calc(100% - 40px);
 }
 
 .bigger {

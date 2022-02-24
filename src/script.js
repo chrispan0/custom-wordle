@@ -349,7 +349,7 @@ function score(word) {
             score.push(1);
         }
     }
-    console.log(JSON.stringify(score));
+    // console.log(JSON.stringify(score));
     return score;
 }
 
