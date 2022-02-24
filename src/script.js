@@ -473,7 +473,7 @@ document.getElementById("generateID").addEventListener("click", () => {
     encrypted = encrypted.toString().replaceAll('+', 'll1994n');
     encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
 
-    var str =  window.location.href + "?e=" + encrypted;
+    var str =  window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
 
    navigator.clipboard.writeText(str);
 });
