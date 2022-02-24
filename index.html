@@ -21,14 +21,53 @@
 </head>
 
 <body>
-
+    
     <div id="board"></div>
+
+    <div id ="block"></div>
+    <div id="keyboard">
+        <div class="keyboardrow">
+            <div >q</div>
+            <div >w</div>
+            <div >e</div>
+            <div >r</div>
+            <div >t</div>
+            <div >y</div>
+            <div >u</div>
+            <div >i</div>
+            <div >o</div>
+            <div >p</div>
+        </div>
+        <div class="keyboardrow" style="margin-left:20px; margin-right:20px;">
+            <div >a</div>
+            <div >s</div>
+            <div >d</div>
+            <div >f</div>
+            <div >g</div>
+            <div >h</div>
+            <div >j</div>
+            <div >k</div>
+            <div >l</div>
+        </div><div class="keyboardrow">
+            <div  class="bigger">enter</div>
+            <div >z</div>
+            <div >x</div>
+            <div >c</div>
+            <div >v</div>
+            <div >b</div>
+            <div >n</div>
+            <div >m</div>
+            <div class="bigger">
+                <game-icon icon="backspace"></game-icon>
+            </div>
+        </div>
+    </div>
 
     <div id="sidepanel">
         <!-- HEADING 1 -->
         <h2 class="panelHeader">How to Play</h2>
         <hr class="panelHR">
-        <p>Each guess must be a valid five-letter word. Hit the enter button to submit.<br>
+        <p>Each guess must be a valid five-letter word. Hit the enter div to submit.<br>
             After each guess, the color of the tiles will change to show how close your guess was to the word.
         </p>
         <br>
@@ -74,7 +113,7 @@
         <h1>My Wordle</h1>
     </div>
 
-    <!-- SIDEPANEL BUTTON -->
+    <!-- SIDEPANEL div -->
     <i id="panelToggle" class="fas fa-chevron-right"></i>
 
 </body>
