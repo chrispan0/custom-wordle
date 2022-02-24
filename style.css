@@ -62,7 +62,7 @@ h1 {
     box-sizing: content-box;
     margin: auto;
     margin-top: 190px;
-    margin-bottom: 190px;
+    margin-bottom: 230px;
     width: 335px;
 }
 
@@ -92,7 +92,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     font-weight: bold;
 }
 
@@ -102,8 +102,12 @@ h1 {
 
 .keyboardrow {
     display: flex;
-    /* display: inline-flex; */
     margin: 0 auto 8px auto;
+}
+
+#keyboardMid {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .bigger {

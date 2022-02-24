@@ -378,6 +378,28 @@ document.getElementById("generate").addEventListener("click", () => {
     init();
 });
 
+Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener("click", () => {
+    e.id = e.innerText.toUpperCase();
+    if (ended) {
+        return;
+    }
+    handleInput(e.innerText.toUpperCase());
+}));
+
+document.getElementById("backspace").addEventListener("click", () => {
+    if (ended) {
+        return;
+    }
+    handleBackspace();
+});
+
+document.getElementById("enter").addEventListener("click", () => {
+    if (ended) {
+        return;
+    }
+    handleEnter();
+});
+
 function handleBackspace() {
     if (getText(currPos) == emptyText && !currPos.rowChangePrev()) {
         currPos.prev();
