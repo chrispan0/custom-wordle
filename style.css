@@ -65,3 +65,48 @@ h1 {
     margin-bottom: 190px;
     width: 335px;
 }
+
+#keyboard {
+    margin: auto;
+    width: 50%;
+    min-width: 420px;
+    max-width: 500px;
+    position:fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 13.333px;
+}
+
+.keyboardrow>div {
+    border: 0;
+    padding: 0;
+    margin: 0 6px 0 0;
+    height: 58px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: #818384;
+    color: white;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#spacer {
+    width: 20px;
+}
+
+.keyboardrow {
+    display: flex;
+    /* display: inline-flex; */
+    margin: 0 auto 8px auto;
+}
+
+.bigger {
+    min-width: 65px;
+    font-size: 12px;
+}

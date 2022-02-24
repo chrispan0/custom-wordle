@@ -24,20 +24,63 @@
 
     <div id="board"></div>
 
+    <!-- Keyboard created by Ciaran Whitney => https://github.com/CEWhitney -->
+    <div id ="block"></div>
+    <div id="keyboard">
+        <div class="keyboardrow">
+            <div>q</div>
+            <div>w</div>
+            <div>e</div>
+            <div>r</div>
+            <div>t</div>
+            <div>y</div>
+            <div>u</div>
+            <div>i</div>
+            <div>o</div>
+            <div>p</div>
+        </div>
+        <div class="keyboardrow" style="margin-left:20px; margin-right:20px;">
+            <div>a</div>
+            <div>s</div>
+            <div>d</div>
+            <div>f</div>
+            <div>g</div>
+            <div>h</div>
+            <div>j</div>
+            <div>k</div>
+            <div>l</div>
+        </div><div class="keyboardrow">
+            <div class="bigger">enter</div>
+            <div>z</div>
+            <div>x</div>
+            <div>c</div>
+            <div>v</div>
+            <div>b</div>
+            <div>n</div>
+            <div>m</div>
+            <div class="bigger">
+                <!-- Pulled From Wordle Site -->
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                    <path fill="white" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path>
+                  </svg>
+            </div>
+        </div>
+    </div>
+
     <div id="sidepanel">
         <h2 class="panelHeader">Settings</h2>
         <hr class="panelHR">
 
         <ul>
-            <label for="seed"> Seed:<br>
+            <label for="seed">Seed:<br>
                 <input id="seed"type="text"placeholder="seed">
             </label>
             
-            <label for="tries"> Tries:<br>
+            <label for="tries">Tries:<br>
                 <input id="tries"type="number"min="1"value="6">
             </label>
             
-            <label for="length"> Word Length:<br>
+            <label for="length">Word Length:<br>
                 <input id="length"type="number"min="1"value="5">
             </label>
             <label for="generate">
