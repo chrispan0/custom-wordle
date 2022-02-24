@@ -29,8 +29,8 @@ anything not involving this sidepanel. */
     border-radius: 50%;
 
     /* Position and Size */
-    top: -5px;
-    left: -15px;
+    top: 45px;
+    left: -10px;
     font-size: 22px;
     padding: 20px;  /* Controls the "hitbox" size */
 }
@@ -71,7 +71,7 @@ anything not involving this sidepanel. */
     transform: translate(calc(var(--panelWidth) - var(--panelBorderWidth)));
 }
 .openPanel2 {
-    transform: translate(470px);
+    transform: translate(455px);
 }
 
 /* PANEL COMPONENTS */
