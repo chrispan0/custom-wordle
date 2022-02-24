@@ -20,6 +20,7 @@ const greyColor = "#3a3a3c";
 const greenColor = "#538d4e";
 const borderColor = "#3a3a3c";
 const borderColorActive = "#565758";
+const keyboardDefault = "#818384";
 const emptyText = "";
 
 let typing;     // set false to prevent input
@@ -57,6 +58,8 @@ function init() {
     state = generateEmptyState(rows, cols);
     currPos = new Position(0, 0, rows, cols);
     generateBoard(state);
+
+    resetKeyboard();
 
 }
 
@@ -266,6 +269,10 @@ function colorRow(position, score) {
                 break;
         }
     }
+}
+
+function resetKeyboard() {
+    Array.from(document.querySelectorAll(".letter")).forEach(e => e.style.backgroundColor = keyboardDefault);
 }
 
 function colorKeyboard(position, score) {
