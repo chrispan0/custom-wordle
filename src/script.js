@@ -42,6 +42,7 @@ let seed = String((d.getMonth() + 1) + "/" + String(d.getDate() + "/" + String(d
 document.getElementById("seed").value = seed;
 
 function init() {
+    document.getElementById("reveal").style.opacity = 0;
     seed = document.getElementById("seed").value;
     activeRows.forEach(e => e.remove());
     letters = {
@@ -377,12 +378,18 @@ function checkIfEnded() {
 function endGame(word) {
     if (word == answer) {
         ended = true;
-        console.log("YOU WIN!");
+        reveal("You win!");
     }
     else {
         ended = true;
-        console.log("YOU LOSE!");
+        reveal(answer);
     }
+}
+
+function reveal(text) {
+    let reveal = document.getElementById("reveal");
+    reveal.innerText = text;
+    reveal.style.opacity = "100%";
 }
 
 // ----------------------------------------------------------------------------- //

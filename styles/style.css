@@ -2,7 +2,7 @@
     font-family: 'Clear Sans';
     src:    
         url('/assets/ClearSans.ttf') format('truetype'),
-        url('/answerList.txt') format('woff');
+        url('/assets/ClearSans.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -61,7 +61,7 @@ h1 {
 #board {
     box-sizing: content-box;
     margin: auto;
-    margin-top: 190px;
+    margin-top: 29px;
     margin-bottom: 230px;
     width: 335px;
 }
@@ -114,4 +114,17 @@ h1 {
 .bigger {
     min-width: 65px;
     font-size: 12px;
+}
+
+#reveal {
+    margin: auto;
+    width: fit-content;
+    padding: 16px;
+    border-radius: 5px;
+    margin-top: 110px;
+    opacity: 0;
+    text-align: center;
+    font-weight: bold;
+    background-color: white;
+    color: black;
 }
