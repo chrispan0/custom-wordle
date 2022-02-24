@@ -29,6 +29,10 @@ let cols;
 let answer;
 let state;
 let currPos;
+let letters = {
+    a:-1,b:-1,c:-1,d:-1,e:-1,f:-1,g:-1,h:-1,i:-1,j:-1,k:-1,l:-1,m:-1,
+    n:-1,o:-1,p:-1,q:-1,r:-1,s:-1,t:-1,u:-1,v:-1,w:-1,x:-1,y:-1,z:-1,
+};
 
 let activeRows = [];
 
@@ -39,6 +43,10 @@ document.getElementById("seed").value = seed;
 function init() {
     seed = document.getElementById("seed").value;
     activeRows.forEach(e => e.remove());
+    letters = {
+        a:-1,b:-1,c:-1,d:-1,e:-1,f:-1,g:-1,h:-1,i:-1,j:-1,k:-1,l:-1,m:-1,
+        n:-1,o:-1,p:-1,q:-1,r:-1,s:-1,t:-1,u:-1,v:-1,w:-1,x:-1,y:-1,z:-1,
+    }
 
     typing = true;     // set false to prevent input
     ended = false;
@@ -49,6 +57,7 @@ function init() {
     state = generateEmptyState(rows, cols);
     currPos = new Position(0, 0, rows, cols);
     generateBoard(state);
+
 }
 
 
@@ -219,18 +228,26 @@ function getText(position) {
 /// GAMEPLAY ///
 ////////////////
 
-function green(element) {
-    element.style.border = borderWidth + "px solid " + greenColor;
+// ----------------------------------------------------------------------------- //
+
+function green(element, border=true) {
+    if(border) {
+        element.style.border = borderWidth + "px solid " + greenColor;
+    }
     element.style.backgroundColor = greenColor;
 }
 
-function yellow(element) {
-    element.style.border = borderWidth + "px solid " + yellowColor;
+function yellow(element, border=true) {
+    if(border) {
+        element.style.border = borderWidth + "px solid " + yellowColor;
+    }
     element.style.backgroundColor = yellowColor;
 }
 
-function grey(element) {
-    element.style.border = borderWidth + "px solid " + greyColor;
+function grey(element, border=true) {
+    if(border) {
+        element.style.border = borderWidth + "px solid " + greyColor;
+    }
     element.style.backgroundColor = greyColor;
 }
 
@@ -247,6 +264,27 @@ function colorRow(position, score) {
             case 2:
                 green(getTile(pos));
                 break;
+        }
+    }
+}
+
+function colorKeyboard(position, score) {
+    let wordArr = Array.from(word(position));
+    for(let i = 0; i < wordArr.length; i++) {
+        if(letters[wordArr[i].toLowerCase()] < score[i]) {
+            letters[wordArr[i].toLowerCase()] = score[i];
+            let elem = document.getElementById(wordArr[i].toUpperCase())
+            switch(score[i]) {
+                case 0:
+                    grey(elem, false);
+                    break;
+                case 1:
+                    yellow(elem, false);
+                    break;
+                case 2:
+                    green(elem, false);
+                    break;
+            }
         }
     }
 }
@@ -378,13 +416,25 @@ document.getElementById("generate").addEventListener("click", () => {
     init();
 });
 
+// set ID's ---> this could be done in the html but i didnt want to.
+Array.from(document.querySelectorAll(".letter")).forEach(e => e.id = e.innerText.toUpperCase());
+
 Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener("click", () => {
-    e.id = e.innerText.toUpperCase();
     if (ended) {
         return;
     }
     handleInput(e.innerText.toUpperCase());
 }));
+
+
+// ----------------------------------------------------------------------------- //
+
+/////////////////////
+/// HANDLE INPUTS ///
+/////////////////////
+
+// ----------------------------------------------------------------------------- //
+
 
 document.getElementById("backspace").addEventListener("click", () => {
     if (ended) {
@@ -400,6 +450,7 @@ document.getElementById("enter").addEventListener("click", () => {
     handleEnter();
 });
 
+// HANDLE BACKSPACE
 function handleBackspace() {
     if (getText(currPos) == emptyText && !currPos.rowChangePrev()) {
         currPos.prev();
@@ -410,6 +461,7 @@ function handleBackspace() {
     }
 }
 
+// HANDLE ENTER
 function handleEnter() {
     if (getText(currPos) == emptyText) {
         return;
@@ -417,12 +469,13 @@ function handleEnter() {
     if (checkValid(word(currPos))) {
         let score = checkAnswer(word(currPos));
         colorRow(currPos, score);
+        colorKeyboard(currPos, score);
         checkIfEnded();
         currPos.next();
     }
 }
 
-// assumes valid input
+// HANDLE ALPHABETIC INPUT
 function handleInput(key) {
     if (getText(currPos) == emptyText) {
         editText(currPos, key);
@@ -433,6 +486,8 @@ function handleInput(key) {
     }
 
 }
+
+// ----------------------------------------------------------------------------- //
 
 ///////////////
 /// RUNTIME ///
