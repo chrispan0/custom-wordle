@@ -98,6 +98,14 @@ h1 {
     font-size: 13.333px;
 }
 
+@media only screen and (max-width: 420px) {
+    #keyboard {
+        margin: none;
+        width: 100vw;
+        min-width: 0px;
+    }
+}
+
 .keyboardrow  div {
     border: 0;
     padding: 0;
@@ -115,6 +123,10 @@ h1 {
     font-weight: bold;
 }
 
+#P, #L, #backspace {
+    margin: 0px;
+}
+
 .keyboardrow {
     width: 100%;
     display: flex;
@@ -126,7 +138,6 @@ h1 {
 }
 
 .bigger {
-    min-width: 65px;
     font-size: 12px;
 }
 

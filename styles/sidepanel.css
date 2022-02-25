@@ -84,10 +84,6 @@ anything not involving this sidepanel. */
         transform: none;
         margin-left: calc(var(--panelWidth) - 45px);
     }
-    /* #panelToggle {
-        position: fixed;
-        margin-left: calc(100% - 40px);
-    } */
 }
 
 /* PANEL COMPONENTS */
