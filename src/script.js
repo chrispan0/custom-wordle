@@ -393,16 +393,19 @@ function score(word) {
     // STEP 1
     for (let i = 0; i < guess.length; i++) {
         if(guess[i] == ans[i]) {
+            "here"
             ans[i] = "~";
+            guess[i] = "}";
             score[i] = 2;
         }
     }
 
     // STEP 2
+    console.log(ans);
     for (let i = 0; i < guess.length; i++) {
         let index = myIndexOf(ans, guess[i], i);
         if (!(index == -1)) {
-            ans[i] = "~";       // can replace i with index for slightly different results
+            ans[index] = "~";       // can replace i with index for slightly different results
             score[i] = 1;
         }
     }
