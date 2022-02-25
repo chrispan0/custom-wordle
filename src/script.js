@@ -393,7 +393,6 @@ function score(word) {
     // STEP 1
     for (let i = 0; i < guess.length; i++) {
         if(guess[i] == ans[i]) {
-            "here"
             ans[i] = "~";
             guess[i] = "}";
             score[i] = 2;
