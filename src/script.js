@@ -448,6 +448,25 @@ function reveal(text) {
     reveal.style.display = "block";
 }
 
+function generateChallengeLink() {
+    if (document.getElementById("customWord").value == "") {
+        console.log("empty word");
+        return;
+    }
+
+    var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
+
+    var encrypted = CryptoJS.AES.encrypt(input, "wordle");
+
+    encrypted = encrypted.toString().replaceAll('&', 'flM667');
+    encrypted = encrypted.toString().replaceAll('+', 'll1994n');
+    encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
+
+    var str = window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
+
+    navigator.clipboard.writeText(str);
+}
+
 // ----------------------------------------------------------------------------- //
 
 ///////////////////////
@@ -510,23 +529,9 @@ Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener
     handleInput(e.innerText.toUpperCase());
 }));
 
+// generate challenge link
 document.getElementById("generateID").addEventListener("click", () => {
-    if (document.getElementById("customWord").value == "") {
-        console.log("empty word");
-        return;
-    }
-
-    var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
-
-    var encrypted = CryptoJS.AES.encrypt(input, "wordle");
-
-    encrypted = encrypted.toString().replaceAll('&', 'flM667');
-    encrypted = encrypted.toString().replaceAll('+', 'll1994n');
-    encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
-
-    var str = window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
-
-    navigator.clipboard.writeText(str);
+    generateChallengeLink();
 });
 
 
