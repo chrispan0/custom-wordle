@@ -511,6 +511,11 @@ Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener
 }));
 
 document.getElementById("generateID").addEventListener("click", () => {
+    if (document.getElementById("customWord").value == "") {
+        console.log("empty word");
+        return;
+    }
+
     var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
 
     var encrypted = CryptoJS.AES.encrypt(input, "wordle");
