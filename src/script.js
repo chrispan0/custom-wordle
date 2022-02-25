@@ -1,4 +1,4 @@
-//  CUSTOM WORDLE -- by Phineas Ziegler
+//  CUSTOM WORDLE -- Phineas Ziegler and Ciaran Whitney
 
 import { dict } from "./dict.js";
 import { answers } from "./answers.js";
@@ -393,16 +393,19 @@ function score(word) {
     // STEP 1
     for (let i = 0; i < guess.length; i++) {
         if(guess[i] == ans[i]) {
+            "here"
             ans[i] = "~";
+            guess[i] = "}";
             score[i] = 2;
         }
     }
 
     // STEP 2
+    console.log(ans);
     for (let i = 0; i < guess.length; i++) {
         let index = myIndexOf(ans, guess[i], i);
         if (!(index == -1)) {
-            ans[i] = "~";       // can replace i with index for slightly different results
+            ans[index] = "~";       // can replace i with index for slightly different results
             score[i] = 1;
         }
     }
@@ -446,6 +449,25 @@ function reveal(text) {
     let reveal = document.getElementById("reveal");
     reveal.innerText = text;
     reveal.style.display = "block";
+}
+
+function generateChallengeLink() {
+    if (document.getElementById("customWord").value == "") {
+        console.log("empty word");
+        return;
+    }
+
+    var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
+
+    var encrypted = CryptoJS.AES.encrypt(input, "wordle");
+
+    encrypted = encrypted.toString().replaceAll('&', 'flM667');
+    encrypted = encrypted.toString().replaceAll('+', 'll1994n');
+    encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
+
+    var str = window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
+
+    navigator.clipboard.writeText(str);
 }
 
 // ----------------------------------------------------------------------------- //
@@ -510,23 +532,9 @@ Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener
     handleInput(e.innerText.toUpperCase());
 }));
 
+// generate challenge link
 document.getElementById("generateID").addEventListener("click", () => {
-    if (document.getElementById("customWord").value == "") {
-        console.log("empty word");
-        return;
-    }
-
-    var input = document.getElementById("customWord").value + "_" + document.getElementById("customTries").value;
-
-    var encrypted = CryptoJS.AES.encrypt(input, "wordle");
-
-    encrypted = encrypted.toString().replaceAll('&', 'flM667');
-    encrypted = encrypted.toString().replaceAll('+', 'll1994n');
-    encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
-
-    var str = window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
-
-    navigator.clipboard.writeText(str);
+    generateChallengeLink();
 });
 
 
