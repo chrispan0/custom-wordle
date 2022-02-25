@@ -400,7 +400,6 @@ function score(word) {
     }
 
     // STEP 2
-    console.log(ans);
     for (let i = 0; i < guess.length; i++) {
         let index = myIndexOf(ans, guess[i], i);
         if (!(index == -1)) {
