@@ -178,13 +178,14 @@ ul > label > input {
     width: fit-content;
     margin-left: auto;
 }
-#generate, #generateID, #Copy {
+#generate, #generateID {
     padding: 5px 20px 5px 20px;
     text-align: right;
     line-height: 2rem;
     transition: color .1s, background-color .1s;
 }
-#generate:hover, #generateID:hover, #Copy:hover {
+#generate:hover, #generateID:hover,
+#generate:focus, #generateID:focus {
     background-color: var(--panelAccent);
     color: white;
     border: none;
