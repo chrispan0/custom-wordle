@@ -137,7 +137,9 @@ h1 {
     width: calc(100% - 40px);
 }
 
-.bigger {
+#enter, #backspace {
+    flex:1.5;
+    min-width: 50px;
     font-size: 12px;
 }
 
