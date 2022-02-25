@@ -30,32 +30,43 @@ let cols;
 let answer;
 let state;
 let currPos;
-let letters = {
-    a:-1,b:-1,c:-1,d:-1,e:-1,f:-1,g:-1,h:-1,i:-1,j:-1,k:-1,l:-1,m:-1,
-    n:-1,o:-1,p:-1,q:-1,r:-1,s:-1,t:-1,u:-1,v:-1,w:-1,x:-1,y:-1,z:-1,
-};
+let letters = {};
+let challenge = false;
 
 let activeRows = [];
 
 const d = new Date();
-let seed = String((d.getMonth() + 1) + "/" + String(d.getDate() + "/" + String(d.getFullYear())));
-document.getElementById("seed").value = seed;
+let seed;
+const urlParams = new URLSearchParams(window.location.search)
+if (urlParams.has('e')) {
+    challenge = true;
+}
 
 function init() {
-    document.getElementById("reveal").style.opacity = 0;
-    seed = document.getElementById("seed").value;
-    activeRows.forEach(e => e.remove());
-    letters = {
-        a:-1,b:-1,c:-1,d:-1,e:-1,f:-1,g:-1,h:-1,i:-1,j:-1,k:-1,l:-1,m:-1,
-        n:-1,o:-1,p:-1,q:-1,r:-1,s:-1,t:-1,u:-1,v:-1,w:-1,x:-1,y:-1,z:-1,
+    document.getElementById("reveal").style.display = "none";
+    let seedInput = document.getElementById("seed").value;
+
+    // if the seed is empty, do the daily wordle
+    if (seedInput == "") {
+        seed = String((d.getDate() + d.getFullYear() + d.getMonth()) * d.getDate() / d.getMonth());
+    }
+    else {
+        seed = seedInput;
     }
 
-    typing = true;     // set false to prevent input
+    // remove any existing row elements
+    activeRows.forEach(e => e.remove());
+
+    // Used to color the keyboard
+    letters = {
+        a: -1, b: -1, c: -1, d: -1, e: -1, f: -1, g: -1, h: -1, i: -1, j: -1, k: -1, l: -1, m: -1,
+        n: -1, o: -1, p: -1, q: -1, r: -1, s: -1, t: -1, u: -1, v: -1, w: -1, x: -1, y: -1, z: -1,
+    }
+
+    typing = true;
     ended = false;
 
-    const urlParams = new URLSearchParams(window.location.search)
-
-    if (urlParams.has('e')) {
+    if (challenge) {
         let decrypted = urlParams.get('e');
 
         decrypted = decrypted.replaceAll('flM667', '&');
@@ -64,30 +75,29 @@ function init() {
 
         decrypted = CryptoJS.AES.decrypt(decrypted, "wordle");
         decrypted = decrypted.toString(CryptoJS.enc.Utf8);
-        console.log(decrypted);
+        // console.log(decrypted);
 
         answer = decrypted.split('_')[0].toUpperCase();
         rows = decrypted.split('_')[1];
         cols = answer.length;
 
         answers.push(answer);
-        dict[answer] = true;
-
-    } else {
-
-    rows = Math.round(parseFloat(document.getElementById("tries").value));
-    cols = Math.round(parseFloat(document.getElementById("length").value));
-    
-    answer = randomWord(seed).toUpperCase();
     }
+    else {
+        rows = Math.round(parseFloat(document.getElementById("tries").value));
+        cols = Math.round(parseFloat(document.getElementById("length").value));
+
+        answer = randomWord(seed).toUpperCase();
+    }
+
+    dict[answer] = true;    // in case the answer word is "not valid."
+
     state = generateEmptyState(rows, cols);
     currPos = new Position(0, 0, rows, cols);
     generateBoard(state);
-
     resetKeyboard();
 
 }
-
 
 // ----------------------------------------------------------------------------- //
 
@@ -157,9 +167,10 @@ function generateEmptyState(tries, wordlength) {
 function generateBoard(state) {    // default is 6x5
     let board = document.getElementById("board");
     board.style.width = ((cols * 335) / 5) + "px";
-    
+
     for (let row = 0; row < state.length; row++) {
         let rowDiv = document.createElement("div");
+        rowDiv.id = row;
         rowDiv.classList.add("row");
         for (let col = 0; col < state[row].length; col++) {
             let div = createDiv(row, col, calculateWidth(state), borderWidth);
@@ -211,6 +222,11 @@ function boardWidth() {
     return width;
 }
 
+function newGame() {
+    challenge = false;
+    init();
+}
+
 // ----------------------------------------------------------------------------- //
 
 /////////////////////////
@@ -258,22 +274,22 @@ function getText(position) {
 
 // ----------------------------------------------------------------------------- //
 
-function green(element, border=true) {
-    if(border) {
+function green(element, border = true) {
+    if (border) {
         element.style.border = borderWidth + "px solid " + greenColor;
     }
     element.style.backgroundColor = greenColor;
 }
 
-function yellow(element, border=true) {
-    if(border) {
+function yellow(element, border = true) {
+    if (border) {
         element.style.border = borderWidth + "px solid " + yellowColor;
     }
     element.style.backgroundColor = yellowColor;
 }
 
-function grey(element, border=true) {
-    if(border) {
+function grey(element, border = true) {
+    if (border) {
         element.style.border = borderWidth + "px solid " + greyColor;
     }
     element.style.backgroundColor = greyColor;
@@ -296,17 +312,19 @@ function colorRow(position, score) {
     }
 }
 
+// Reset Keyboard Colors
 function resetKeyboard() {
     Array.from(document.querySelectorAll(".letter")).forEach(e => e.style.backgroundColor = keyboardDefault);
 }
 
+// Color the Keyboard according to a score
 function colorKeyboard(position, score) {
     let wordArr = Array.from(word(position));
-    for(let i = 0; i < wordArr.length; i++) {
-        if(letters[wordArr[i].toLowerCase()] < score[i]) {
+    for (let i = 0; i < wordArr.length; i++) {
+        if (letters[wordArr[i].toLowerCase()] < score[i]) {
             letters[wordArr[i].toLowerCase()] = score[i];
             let elem = document.getElementById(wordArr[i].toUpperCase())
-            switch(score[i]) {
+            switch (score[i]) {
                 case 0:
                     grey(elem, false);
                     break;
@@ -321,23 +339,28 @@ function colorKeyboard(position, score) {
     }
 }
 
+// ACTIVE
 function active(element) {
     element.style.border = borderWidth + "px solid " + borderColorActive;
 }
 
+// INACTIVE
 function inactive(element) {
     element.style.border = borderWidth + "px solid " + borderColor;
 }
 
+// UPDATE STATE
 function updateState(position, key) {
     state[position.getRow()][position.getCol()] = key;
 }
 
+// WORD 
 function word(position) {
     let word = state[position.getRow()].join("");
     return word;
 }
 
+// CHECK VALID
 function checkValid(word) {
     if (dict[word]) {
         console.log(word + " valid");
@@ -347,6 +370,7 @@ function checkValid(word) {
     return false;
 }
 
+// CHECK ANSWER
 function checkAnswer(word) {
     if (word == answer) {
         endGame(word);
@@ -358,20 +382,28 @@ function checkAnswer(word) {
 function score(word) {
     let ans = Array.from(answer);
     let guess = Array.from(word);
-    let score = [];     // 0 = not there, 1 = good guess, wrong spot, 2 = correct guess
+    let score = new Array(guess.length).fill(0);
 
+    /* 
+        1. check for exact matches, remove from ans
+        2. check for half matches, remove from ans
+        3. push zeroes elsewhere
+    */
+
+    // STEP 1
+    for (let i = 0; i < guess.length; i++) {
+        if(guess[i] == ans[i]) {
+            ans[i] = "~";
+            score[i] = 2;
+        }
+    }
+
+    // STEP 2
     for (let i = 0; i < guess.length; i++) {
         let index = myIndexOf(ans, guess[i], i);
-        if (index == i) {
-            ans[index] = "~";
-            score.push(2);
-        }
-        else if (index == -1) {
-            score.push(0);
-        }
-        else {
-            ans[index] = "~";
-            score.push(1);
+        if (!(index == -1)) {
+            ans[i] = "~";       // can replace i with index for slightly different results
+            score[i] = 1;
         }
     }
     // console.log(JSON.stringify(score));
@@ -394,7 +426,7 @@ function myIndexOf(array, element, start) {
 }
 
 function checkIfEnded() {
-    if(currPos.getRow() == rows - 1 && currPos.getCol() == cols-1) {
+    if (currPos.getRow() == rows - 1 && currPos.getCol() == cols - 1) {
         endGame(word(currPos));
     }
 }
@@ -413,13 +445,13 @@ function endGame(word) {
 function reveal(text) {
     let reveal = document.getElementById("reveal");
     reveal.innerText = text;
-    reveal.style.opacity = "100%";
+    reveal.style.display = "block";
 }
 
 // ----------------------------------------------------------------------------- //
 
 ///////////////////////
-/// EVENT HANDLING ////
+/// EVENT HANDLERS ////
 ///////////////////////
 
 // ----------------------------------------------------------------------------- //
@@ -443,6 +475,23 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+// Start a new puzzle.
+document.getElementById("generate").addEventListener("click", () => {
+    newGame();
+});
+
+/* Fixes a "bug" which wasnt really a bug. Occasionally the user would
+accidentally tab into the "generate" button, and then begin typing. 
+When they press "enter" it would reset the board, but it looks like
+the word wasnt accepted. */
+document.getElementById("generate").addEventListener("focus", () => {
+    typing = false;
+});
+document.getElementById("generate").addEventListener("focusout", () => {
+    typing = true;
+});
+
+// Prevents any typed input meant for the input from going into the game
 Array.from(document.querySelectorAll("ul > label > input")).forEach(e => e.addEventListener("focus", () => {
     typing = false;
 }));
@@ -450,13 +499,10 @@ Array.from(document.querySelectorAll("ul > label > input")).forEach(e => e.addEv
     typing = true;
 }));
 
-document.getElementById("generate").addEventListener("click", () => {
-    init();
-});
-
-// set ID's ---> this could be done in the html but i didnt want to.
+// set ID's for the keyboard divs ---> this could be done in the html but i didnt want to.
 Array.from(document.querySelectorAll(".letter")).forEach(e => e.id = e.innerText.toUpperCase());
 
+// Add event listeners to the keyboard buttons
 Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener("click", () => {
     if (ended) {
         return;
@@ -473,9 +519,9 @@ document.getElementById("generateID").addEventListener("click", () => {
     encrypted = encrypted.toString().replaceAll('+', 'll1994n');
     encrypted = encrypted.toString().replaceAll('/', 'jf0901DD');
 
-    var str =  window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
+    var str = window.location.protocol + "//" + window.location.host + window.location.pathname + "?e=" + encrypted;
 
-   navigator.clipboard.writeText(str);
+    navigator.clipboard.writeText(str);
 });
 
 
@@ -486,7 +532,6 @@ document.getElementById("generateID").addEventListener("click", () => {
 /////////////////////
 
 // ----------------------------------------------------------------------------- //
-
 
 document.getElementById("backspace").addEventListener("click", () => {
     if (ended) {
@@ -524,7 +569,9 @@ function handleEnter() {
         colorKeyboard(currPos, score);
         checkIfEnded();
         currPos.next();
+        return;
     }
+    animateInvalid(currPos);
 }
 
 // HANDLE ALPHABETIC INPUT
@@ -536,7 +583,6 @@ function handleInput(key) {
     if (!currPos.rowChangeNext()) {
         currPos.next();
     }
-
 }
 
 // ----------------------------------------------------------------------------- //

@@ -25,18 +25,33 @@ body {
 }
 
 h1 {
+    margin: auto;
+    display: block;
     font-family: 'Roboto Slab', Georgia, 'Times New Roman', Times, serif;
     font-size: 2.2rem;
     text-align: center;
     margin-bottom: 3px;
     transform: scaleX(.8);
+    /* width: fit-content; */
 }
+
+#intro > div > a, #intro > div > a:visited, #intro > div > a:active{
+    text-decoration: none;
+    color: inherit;
+}
+
 #intro {
     position: fixed;
     width: 100%;
     top: 0px;
     background-color: var(--background);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#separator {
+    display: block;
+    margin: auto;
+    width: fit-content;
 }
 
 .row {
@@ -50,7 +65,6 @@ h1 {
     background-color: var(--background);
 }
 
-
 .tileText {
     font-weight: 900;
     text-align: center;
@@ -61,7 +75,7 @@ h1 {
 #board {
     box-sizing: content-box;
     margin: auto;
-    margin-top: 29px;
+    margin-top: 192px;
     margin-bottom: 230px;
     width: 335px;
 }
@@ -117,12 +131,14 @@ h1 {
 }
 
 #reveal {
-    margin: auto;
+    position: absolute;
     width: fit-content;
     padding: 16px;
     border-radius: 5px;
-    margin-top: 110px;
-    opacity: 0;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
     text-align: center;
     font-weight: bold;
     background-color: white;

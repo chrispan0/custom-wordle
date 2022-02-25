@@ -30,8 +30,8 @@
 </head>
 
 <body>
-    <div id="reveal">|</div>
     <div id="board"></div>
+    <div id="reveal"></div>
 
     <!-- Keyboard created by Ciaran Whitney => https://github.com/CEWhitney -->
     <div id="keyboard">
@@ -85,7 +85,7 @@
 
         <ul>
             <label for="seed">Seed:<br>
-                <input id="seed" type="text" placeholder="seed">
+                <input id="seed" type="text" placeholder="something random">
             </label>
 
             <label for="tries">Tries:<br>
@@ -95,7 +95,7 @@
             <label for="length">Word Length:<br>
                 <input id="length" type="number" min="1" value="5">
             </label>
-            <label for="generate">
+            <label class="button" for="generate">
                 <input id="generate" type="submit" value="Generate">
             </label>
         </ul>
@@ -114,10 +114,9 @@
                 <input id="customTries" type="number" min="1" value="6">
             </label>
 
-            <label for="generateID">
+            <label class="button" for="generateID">
                 <input id="generateID" type="submit" value="Copy Link">
             </label>
-            
         </ul>
 
         <!-- HEADING 1 -->
@@ -170,7 +169,11 @@
     </div>
 
     <div id="intro">
-        <h1>My Wordle</h1>
+        <div id="separator">
+            <a href="https://phinziegler.github.io/My-Wordle/">
+                <h1>My Wordle</h1>
+            </a>
+        </div>
     </div>
 
     <!-- SIDEPANEL div -->
