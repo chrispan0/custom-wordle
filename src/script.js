@@ -1,4 +1,4 @@
-//  CUSTOM WORDLE -- by Phineas Ziegler
+//  CUSTOM WORDLE -- Phineas Ziegler and Ciaran Whitney
 
 import { dict } from "./dict.js";
 import { answers } from "./answers.js";
