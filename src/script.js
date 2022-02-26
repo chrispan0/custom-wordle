@@ -13,6 +13,7 @@ import Position from "./position.js";
 
 // ----------------------------------------------------------------------------- //
 
+// Style Constants
 const gridSpace = 2.5; // 5px border between tiles
 const borderWidth = 2;
 const yellowColor = "#b59f3b";
@@ -21,8 +22,24 @@ const greenColor = "#538d4e";
 const borderColor = "#3a3a3c";
 const borderColorActive = "#565758";
 const keyboardDefault = "#818384";
-const emptyText = "";
 
+// ANIMATION CONSTANTS -- safe to change ----
+// Flip animation
+const flipTime = 0.5;       // amount of time for a flip to take place in s
+const flipExp = 3;          // exponent used to animate flip -- only odd ints
+const flipNextFrac = 0.5;   // % time through the anim to start the next one.
+
+// Invalid animation
+const invalidTime = 0.125;
+const invalidOffset = 6;
+const invalidIterations = 3;
+
+// Input animation
+const inputAnimScale = 1.1;
+const inputAnimTime = 0.08;
+
+// GAME VARIABLES
+const emptyText = "";
 let typing;     // set false to prevent input
 let ended;
 let rows;
@@ -32,9 +49,9 @@ let state;
 let currPos;
 let letters = {};
 let challenge = false;
-
 let activeRows = [];
 
+// CHALLENGE DETECTION
 const d = new Date();
 let seed;
 const urlParams = new URLSearchParams(window.location.search)
@@ -75,7 +92,6 @@ function init() {
 
         decrypted = CryptoJS.AES.decrypt(decrypted, "wordle");
         decrypted = decrypted.toString(CryptoJS.enc.Utf8);
-        // console.log(decrypted);
 
         answer = decrypted.split('_')[0].toUpperCase();
         rows = decrypted.split('_')[1];
@@ -139,11 +155,10 @@ function randomWord(seed) {
     let rand = sfc32(hash(), hash(), hash(), hash());
 
     let choices = answers.filter(word => word.length == cols);
-    console.log("found " + choices.length + " options for word length " + cols + ".");
+    console.log("Found " + choices.length + " possible solutions for word length " + cols + ".");
 
     if (choices.length > 0) {
         let outcome = Math.floor((choices.length + 1) * rand());
-        // console.log(choices[outcome]);
         return choices[outcome];
     }
     return -1;
@@ -295,21 +310,10 @@ function grey(element, border = true) {
     element.style.backgroundColor = greyColor;
 }
 
-function colorRow(position, score) {
-    for (let i = 0; i < score.length; i++) {
-        let pos = new Position(position.getRow(), i, rows, cols);
-        switch (score[i]) {
-            case 0:
-                grey(getTile(pos));
-                break;
-            case 1:
-                yellow(getTile(pos));
-                break;
-            case 2:
-                green(getTile(pos));
-                break;
-        }
-    }
+// REVEAL AND COLOR A ROW
+function revealRow(position, score) {
+    let pos = new Position(position.getRow(), 0, rows, cols);
+    animateFlip(pos, flipTime, flipExp, flipNextFrac, score);
 }
 
 // Reset Keyboard Colors
@@ -349,6 +353,113 @@ function inactive(element) {
     element.style.border = borderWidth + "px solid " + borderColor;
 }
 
+function animateInvalid(currPos, offset, timeS, iterations) {
+    let rowDiv = document.getElementById(currPos.getRow());
+    rowDiv.animate([
+        // keyframes
+        { transform: 'translateX(0px)' },
+        { transform: 'translateX(' + (-offset) + 'px)' },
+        { transform: 'translateX(0px)' },
+        { transform: 'translateX(' + offset + 'px)' },
+        { transform: 'translateX(0px)' }
+      ], {
+        // timing options
+        duration: timeS * 1000,
+        iterations: iterations,
+      });
+}
+
+function animateInput(currPos, scale, timeS) {
+    let tile = getTile(currPos);
+    tile.animate([
+        // keyframes
+        { transform: 'scale(1)' },
+        { transform: 'scale(' + scale +')' },
+        { transform: 'scale(1)' },
+
+      ], {
+        // timing options
+        duration: timeS * 1000,
+        iterations: 1,
+      });
+}
+
+// COLOR A SPECIFIC TILE
+function colorTile(elem, score) {
+    switch (score) {
+        case 0:
+            grey(elem);
+            break;
+        case 1:
+            yellow(elem);
+            break;
+        case 2:
+            green(elem);
+            break;
+    }
+}
+
+// ANIMATE FLIP
+function animateFlip(position, time, exp, nextFrac, scoreArr) {     // exp is the exponent to control the speed of the flip
+                                                                    // nextFrac is the % of time through the anim to wait before starting the next
+    let start;
+    let duration = time / 2;
+    let elem = getTile(position);
+    let beganNext = false;
+    let myCol = position.getCol();
+
+    // FLIP DOWN
+    function flipDown(timestamp) {
+        if(start == undefined) {
+            start = timestamp;
+        }
+
+        let elapsed = (timestamp - start) / 1000; // time elapsed in seconds
+        let scale = (-((elapsed / duration) ** exp)) + 1;
+
+        // begin next flip
+        if(elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
+            animateFlip(position.next(), time, exp, nextFrac, scoreArr);
+            beganNext = true;
+        }
+
+        if(scale <= 0) {
+            scale = 0;
+            colorTile(elem, scoreArr[myCol]);
+            elem.style.transform = "scaleY(" + scale + ")";
+            window.requestAnimationFrame(flipUp)
+            return;
+        }
+        
+        elem.style.transform = "scaleY(" + scale + ")";
+        window.requestAnimationFrame(flipDown);
+    }
+
+    // FLIP UP
+    function flipUp(timestamp) {
+        let elapsed = (timestamp - start) / 1000; // time elapsed in seconds
+        let scale = ((elapsed - (2 * duration)) / duration) ** exp + 1;
+
+        // Begin next flip
+        if(elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
+            animateFlip(position.next(), time, exp, nextFrac, scoreArr);
+            beganNext = true;
+        }
+
+        if(scale >= 1) {
+            scale = 1;
+            elem.style.transform = "scaleY(" + scale + ")";
+            return;
+        }
+        
+        elem.style.transform = "scaleY(" + scale + ")";
+        window.requestAnimationFrame(flipUp);
+    }
+
+    window.requestAnimationFrame(flipDown);
+}
+
+
 // UPDATE STATE
 function updateState(position, key) {
     state[position.getRow()][position.getCol()] = key;
@@ -367,6 +478,7 @@ function checkValid(word) {
         return true;
     }
     console.log(word + " invalid");
+    animateInvalid(currPos, invalidOffset, invalidTime, invalidIterations);
     return false;
 }
 
@@ -407,7 +519,6 @@ function score(word) {
             score[i] = 1;
         }
     }
-    // console.log(JSON.stringify(score));
     return score;
 }
 
@@ -451,7 +562,6 @@ function reveal(text) {
 
 function generateChallengeLink() {
     if (document.getElementById("customWord").value == "") {
-        console.log("empty word");
         return;
     }
 
@@ -576,13 +686,12 @@ function handleEnter() {
     }
     if (checkValid(word(currPos))) {
         let score = checkAnswer(word(currPos));
-        colorRow(currPos, score);
+        revealRow(currPos, score);
         colorKeyboard(currPos, score);
         checkIfEnded();
         currPos.next();
         return;
     }
-    animateInvalid(currPos);
 }
 
 // HANDLE ALPHABETIC INPUT
@@ -590,6 +699,7 @@ function handleInput(key) {
     if (getText(currPos) == emptyText) {
         editText(currPos, key);
         active(getTile(currPos));
+        animateInput(currPos, inputAnimScale, inputAnimTime);
     }
     if (!currPos.rowChangeNext()) {
         currPos.next();
