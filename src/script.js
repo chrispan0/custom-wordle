@@ -312,8 +312,16 @@ function grey(element, border = true) {
 
 // REVEAL AND COLOR A ROW
 function revealRow(position, score) {
+    typing = false;
     let pos = new Position(position.getRow(), 0, rows, cols);
     animateFlip(pos, flipTime, flipExp, flipNextFrac, score);
+}
+
+// END OF REVEAL -- do anything that should happen after all letters are revealed.
+function endOfReveal(position, scoreArr) {
+    typing = true;
+    colorKeyboard(position, scoreArr);
+    checkIfEnded(word(position));
 }
 
 // Reset Keyboard Colors
@@ -362,11 +370,11 @@ function animateInvalid(currPos, offset, timeS, iterations) {
         { transform: 'translateX(0px)' },
         { transform: 'translateX(' + offset + 'px)' },
         { transform: 'translateX(0px)' }
-      ], {
+    ], {
         // timing options
         duration: timeS * 1000,
         iterations: iterations,
-      });
+    });
 }
 
 function animateInput(currPos, scale, timeS) {
@@ -374,14 +382,14 @@ function animateInput(currPos, scale, timeS) {
     tile.animate([
         // keyframes
         { transform: 'scale(1)' },
-        { transform: 'scale(' + scale +')' },
+        { transform: 'scale(' + scale + ')' },
         { transform: 'scale(1)' },
 
-      ], {
+    ], {
         // timing options
         duration: timeS * 1000,
         iterations: 1,
-      });
+    });
 }
 
 // COLOR A SPECIFIC TILE
@@ -401,7 +409,7 @@ function colorTile(elem, score) {
 
 // ANIMATE FLIP
 function animateFlip(position, time, exp, nextFrac, scoreArr) {     // exp is the exponent to control the speed of the flip
-                                                                    // nextFrac is the % of time through the anim to wait before starting the next
+    // nextFrac is the % of time through the anim to wait before starting the next
     let start;
     let duration = time / 2;
     let elem = getTile(position);
@@ -410,7 +418,7 @@ function animateFlip(position, time, exp, nextFrac, scoreArr) {     // exp is th
 
     // FLIP DOWN
     function flipDown(timestamp) {
-        if(start == undefined) {
+        if (start == undefined) {
             start = timestamp;
         }
 
@@ -418,19 +426,19 @@ function animateFlip(position, time, exp, nextFrac, scoreArr) {     // exp is th
         let scale = (-((elapsed / duration) ** exp)) + 1;
 
         // begin next flip
-        if(elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
+        if (elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
             animateFlip(position.next(), time, exp, nextFrac, scoreArr);
             beganNext = true;
         }
 
-        if(scale <= 0) {
+        if (scale <= 0) {
             scale = 0;
             colorTile(elem, scoreArr[myCol]);
             elem.style.transform = "scaleY(" + scale + ")";
             window.requestAnimationFrame(flipUp)
             return;
         }
-        
+
         elem.style.transform = "scaleY(" + scale + ")";
         window.requestAnimationFrame(flipDown);
     }
@@ -441,17 +449,21 @@ function animateFlip(position, time, exp, nextFrac, scoreArr) {     // exp is th
         let scale = ((elapsed - (2 * duration)) / duration) ** exp + 1;
 
         // Begin next flip
-        if(elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
+        if (elapsed >= (nextFrac * time) && position.getCol() < cols - 1 && beganNext == false) {
             animateFlip(position.next(), time, exp, nextFrac, scoreArr);
             beganNext = true;
         }
 
-        if(scale >= 1) {
+        if (scale >= 1) {
             scale = 1;
             elem.style.transform = "scaleY(" + scale + ")";
+
+            if (position.getCol() >= cols - 1) {
+                endOfReveal(position, scoreArr);
+            }
             return;
         }
-        
+
         elem.style.transform = "scaleY(" + scale + ")";
         window.requestAnimationFrame(flipUp);
     }
@@ -482,14 +494,14 @@ function checkValid(word) {
     return false;
 }
 
-// CHECK ANSWER
-function checkAnswer(word) {
-    if (word == answer) {
-        endGame(word);
-        return score(word);
-    }
-    return score(word);
-}
+// // CHECK ANSWER
+// function checkAnswer(word) {
+//     if (word == answer) {
+//         endGame(word);
+//         return score(word);
+//     }
+//     return score(word);
+// }
 
 function score(word) {
     let ans = Array.from(answer);
@@ -504,7 +516,7 @@ function score(word) {
 
     // STEP 1
     for (let i = 0; i < guess.length; i++) {
-        if(guess[i] == ans[i]) {
+        if (guess[i] == ans[i]) {
             ans[i] = "~";
             guess[i] = "}";
             score[i] = 2;
@@ -537,9 +549,9 @@ function myIndexOf(array, element, start) {
     return -1;
 }
 
-function checkIfEnded() {
-    if (currPos.getRow() == rows - 1 && currPos.getCol() == cols - 1) {
-        endGame(word(currPos));
+function checkIfEnded(word) {
+    if (word == answer || (currPos.getRow() == rows - 1 && currPos.getCol() == cols - 1)) {
+        endGame(word);
     }
 }
 
@@ -685,10 +697,8 @@ function handleEnter() {
         return;
     }
     if (checkValid(word(currPos))) {
-        let score = checkAnswer(word(currPos));
-        revealRow(currPos, score);
-        colorKeyboard(currPos, score);
-        checkIfEnded();
+        // let score = checkAnswer(word(currPos));
+        revealRow(currPos, score(word(currPos)));
         currPos.next();
         return;
     }
