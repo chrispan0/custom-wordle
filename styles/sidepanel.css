@@ -170,18 +170,18 @@ ul > label > input {
 
 #seed {
     font-size: 1rem;
-    /* width: 100%; */
 }
 
-.button {
-    position: relative;
-    width: fit-content;
-    margin-left: auto;
-}
 #generate, #generateID {
     padding: 5px 20px 5px 20px;
     text-align: right;
     line-height: 2rem;
+    color: black;
+    border-radius: 5px;
+    width: fit-content;
+    font-size: 1.2rem;
+    margin-left: auto;
+    background-color: white;
     transition: color .1s, background-color .1s;
 }
 #generate:hover, #generateID:hover,
