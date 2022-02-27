@@ -238,7 +238,10 @@ function boardWidth() {
 }
 
 function newGame() {
-    challenge = false;
+    if(challenge) {
+        answers.pop();
+        challenge = false;
+    }
     init();
 }
 
