@@ -4,7 +4,6 @@ Wordle engine. Customize number of tries, length of solutions, and create challe
 
 ## To Do
 <ol>
-  <li>Feedback for when an input word is invalid.</li>
   <li>Feedback on copy link button.</li>
   <li>Feedback on generate button.</li>
   <li>Text to explain the seed.</li>
@@ -12,5 +11,6 @@ Wordle engine. Customize number of tries, length of solutions, and create challe
   <li>Different themed answer sets.</li>
   <li>Indicator for when the current challenge is from a challenge link.</li>
   <li>Option to add additional rows without resetting the board.</li>
+  <li>Different difficulties: Higher difficulty corresponds to more repeated characters in the answer</li>
   <li>Refactor 'script.js' to be multiple imported scripts.</li>
 </ol>
