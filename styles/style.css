@@ -161,3 +161,23 @@ h1 {
 .button, #panelToggle {
     cursor:pointer;
 }
+
+.toastNotification {
+    display: flex;
+    flex-direction: row;
+    font-family: 'Clear Sans', Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+    position: fixed;
+    margin: 20px;
+    padding: 20px;
+    /* width: 200px; */
+    text-align: center;
+    border-radius: 6px;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.336);
+}
+.notifIcon {
+    margin-right: 20px;
+    font-size: 1.6rem;
+}

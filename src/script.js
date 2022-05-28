@@ -3,6 +3,7 @@
 import { dict } from "./dict.js";
 import { answers } from "./answers.js";
 import Position from "./position.js";
+import ToastNotification from "./toastNotification.js";
 
 
 // ----------------------------------------------------------------------------- //
@@ -623,6 +624,7 @@ document.addEventListener("keydown", (e) => {
 // Start a new puzzle.
 document.getElementById("generate").addEventListener("click", () => {
     newGame();
+    new ToastNotification().generate("New game started!", 2000, "hsl(115, 40%, 50%)");
 });
 
 /* Fixes a "bug" which wasnt really a bug. Occasionally the user would
@@ -656,8 +658,10 @@ Array.from(document.querySelectorAll(".letter")).forEach(e => e.addEventListener
 }));
 
 // generate challenge link
-document.getElementById("generateID").addEventListener("click", () => {
+document.getElementById("generateID").addEventListener("click", (e) => {
+    e.stopPropagation();
     generateChallengeLink();
+    new ToastNotification().copyLink("Copied to clipboard!", 2000, "hsl(115, 40%, 50%)");
 });
 
 
