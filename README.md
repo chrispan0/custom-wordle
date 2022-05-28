@@ -4,8 +4,6 @@ Wordle engine. Customize number of tries, length of solutions, and create challe
 
 ## To Do
 <ol>
-  <li>Feedback on copy link button.</li>
-  <li>Feedback on generate button.</li>
   <li>Text to explain the seed.</li>
   <li>Button to generate a new word of the same length that shows up at the end of a game.</li>
   <li>Different themed answer sets.</li>
