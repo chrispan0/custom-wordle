@@ -10,3 +10,5 @@ function toggleMenu(menu, button) {
     button.classList.toggle("openPanel2");
     button.classList.toggle("fa-times");
 }
+
+toggleMenu(panel, panelToggle);
