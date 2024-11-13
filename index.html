@@ -1,195 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta property="og:title" content="My Wordle"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://phinziegler.github.io/My-Wordle/"/>
-    <meta property="og:image" content="https://raw.githubusercontent.com/phinziegler/Personal-Website/main/images/wordle.png"/>
-    <meta property="og:description" content="Try the daily Wordle, random Wordle, or a custom Wordle to challenge your friends."/>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap" rel="stylesheet">
-    <link href="assets/ClearSans.ttf" as="font" type="font/ttf" crossorigin>
-    <link href="assets/ClearSans.woff" as="font" type="font/woff" crossorigin>
-    
-    <link rel="icon" type="image/png" href="assets/favicon.png"/>
+    <meta property="og:title" content="Chris's Wordle" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wordle.chrispanetta.com" />
+    <meta
+      property="og:image"
+      content="https://raw.githubusercontent.com/phinziegler/Personal-Website/main/images/wordle.png"
+    />
+    <meta
+      property="og:description"
+      content="Try the daily Wordle, random Wordle, or a custom Wordle to challenge your friends."
+    />
 
-    <link rel="stylesheet" href="styles/sidepanel.css">
-    <link rel="stylesheet" href="styles/style.css">
-    
-    <script src="https://kit.fontawesome.com/73970ed689.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <link href="assets/ClearSans.ttf" as="font" type="font/ttf" crossorigin />
+    <link href="assets/ClearSans.woff" as="font" type="font/woff" crossorigin />
+
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+    <link rel="stylesheet" href="styles/sidepanel.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+
+    <script
+      src="https://kit.fontawesome.com/73970ed689.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script type="module" src="src/script.js" defer></script>
     <script type="module" src="src/sidepanel.js" defer></script>
 
     <title>My Wordle</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="board"></div>
     <div id="reveal"></div>
 
     <!-- Keyboard created by Ciaran Whitney => https://github.com/CEWhitney -->
     <div id="keyboard">
-        <div class="keyboardrow">
-            <div class="letter">Q</div>
-            <div class="letter">W</div>
-            <div class="letter">E</div>
-            <div class="letter">R</div>
-            <div class="letter">T</div>
-            <div class="letter">Y</div>
-            <div class="letter">U</div>
-            <div class="letter">I</div>
-            <div class="letter">O</div>
-            <div class="letter">P</div>
+      <div class="keyboardrow">
+        <div class="letter">Q</div>
+        <div class="letter">W</div>
+        <div class="letter">E</div>
+        <div class="letter">R</div>
+        <div class="letter">T</div>
+        <div class="letter">Y</div>
+        <div class="letter">U</div>
+        <div class="letter">I</div>
+        <div class="letter">O</div>
+        <div class="letter">P</div>
+      </div>
+      <div class="keyboardrow" id="keyboardMid">
+        <div class="letter">A</div>
+        <div class="letter">S</div>
+        <div class="letter">D</div>
+        <div class="letter">F</div>
+        <div class="letter">G</div>
+        <div class="letter">H</div>
+        <div class="letter">J</div>
+        <div class="letter">K</div>
+        <div class="letter">L</div>
+      </div>
+      <div class="keyboardrow">
+        <div id="enter" class="bigger">ENTER</div>
+        <div class="letter">Z</div>
+        <div class="letter">X</div>
+        <div class="letter">C</div>
+        <div class="letter">V</div>
+        <div class="letter">B</div>
+        <div class="letter">N</div>
+        <div class="letter">M</div>
+        <div id="backspace" class="bigger">
+          <!-- Pulled From Wordle Site -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          >
+            <path
+              fill="white"
+              d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"
+            ></path>
+          </svg>
         </div>
-        <div class="keyboardrow" id="keyboardMid">
-            <div class="letter">A</div>
-            <div class="letter">S</div>
-            <div class="letter">D</div>
-            <div class="letter">F</div>
-            <div class="letter">G</div>
-            <div class="letter">H</div>
-            <div class="letter">J</div>
-            <div class="letter">K</div>
-            <div class="letter">L</div>
-        </div>
-        <div class="keyboardrow">
-            <div id="enter"class="bigger">ENTER</div>
-            <div class="letter">Z</div>
-            <div class="letter">X</div>
-            <div class="letter">C</div>
-            <div class="letter">V</div>
-            <div class="letter">B</div>
-            <div class="letter">N</div>
-            <div class="letter">M</div>
-            <div id="backspace"class="bigger">
-                <!-- Pulled From Wordle Site -->
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                    <path fill="white"
-                        d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z">
-                    </path>
-                </svg>
-
-            </div>
-        </div>
+      </div>
     </div>
 
     <div id="sidepanel">
-        <h2 class="panelHeader">Settings</h2>
-        <hr class="panelHR">
-        <p class="panelText">
-            Type anything in the seed input to try a new word, or leave it empty to do the daily challenge.
-        </p>
-        <br>
-        <ul>
-            <label for="seed">Seed:<br>
-                <input id="seed" type="text" placeholder="something random">
-            </label>
+      <h2 class="panelHeader">Settings</h2>
+      <hr class="panelHR" />
+      <p class="panelText">
+        Type anything in the seed input to try a new word, or leave it empty to
+        do the daily challenge.
+      </p>
+      <br />
+      <ul>
+        <label for="seed"
+          >Seed:<br />
+          <input id="seed" type="text" placeholder="something random" />
+        </label>
 
-            <label for="tries">Tries:<br>
-                <input id="tries" type="number" min="1" value="6">
-            </label>
+        <label for="tries"
+          >Tries:<br />
+          <input id="tries" type="number" min="1" value="6" />
+        </label>
 
-            <label for="length">Word Length:<br>
-                <input id="length" type="number" min="1" value="5">
-            </label>
-            <div id="generate" class="button">Generate</div>
-            <!-- <label class="button" for="generate">
+        <label for="length"
+          >Word Length:<br />
+          <input id="length" type="number" min="1" value="5" />
+        </label>
+        <div id="generate" class="button">Generate</div>
+        <!-- <label class="button" for="generate">
                 <input id="generate" type="submit" value="Generate">
             </label> -->
-        </ul>
+      </ul>
 
-        <br>
+      <br />
 
-        <h2 class="panelHeader">Custom Challenge</h2>
-        <hr class="panelHR">
-        <p class="panelText">
-            Choose a solution word, and a number of allowed tries, then send the link to a friend to see if they can solve it!
-        </p>
-        <br>
-        <ul>
-            <label for="customWord">Word<br>
-                <input id="customWord" type="text" placeholder="Wordle">
-            </label>
+      <h2 class="panelHeader">Custom Challenge</h2>
+      <hr class="panelHR" />
+      <p class="panelText">
+        Choose a solution word, and a number of allowed tries, then send the
+        link to a friend to see if they can solve it!
+      </p>
+      <br />
+      <ul>
+        <label for="customWord"
+          >Word<br />
+          <input id="customWord" type="text" placeholder="Wordle" />
+        </label>
 
-            <label for="customTries">Tries:<br>
-                <input id="customTries" type="number" min="1" value="6">
-            </label>
+        <label for="customTries"
+          >Tries:<br />
+          <input id="customTries" type="number" min="1" value="6" />
+        </label>
 
-            <div id="generateID" class="button">Get Link</div>
-            <!-- <label class="button" for="generateID">
+        <div id="generateID" class="button">Get Link</div>
+        <!-- <label class="button" for="generateID">
                 <input id="generateID" type="submit" value="Get Link">
             </label> -->
-        </ul>
+      </ul>
 
-        <!-- HEADING 1 -->
-        <h2 class="panelHeader">How to Play</h2>
-        <hr class="panelHR">
-        <p class="panelText">Each guess must be a valid five-letter word. Hit the enter button to submit.<br>
-            After each guess, the color of the tiles will change to show how close your guess was to the word.
-        </p>
-        <br>
-        <h3>Examples:</h3>
-        <img src="assets/examples.png" alt="picture showing examples of how the screen looks when letters are typed.">
+      <!-- HEADING 1 -->
+      <h2 class="panelHeader">How to Play</h2>
+      <hr class="panelHR" />
+      <p class="panelText">
+        Each guess must be a valid five-letter word. Hit the enter button to
+        submit.<br />
+        After each guess, the color of the tiles will change to show how close
+        your guess was to the word.
+      </p>
+      <br />
+      <h3>Examples:</h3>
+      <img
+        src="assets/examples.png"
+        alt="picture showing examples of how the screen looks when letters are typed."
+      />
 
-        <!-- HEADING 2 -->
-        <h2 class="panelHeader">Disclaimer</h2>
-        <hr class="panelHR">
-        <p class="panelText">
-            I did not invent this game. This site is a clone of the original game, <a class="contentLink"
-                target="_blank" href="https://www.nytimes.com/games/wordle/index.html">Wordle.</a>
-        </p>
-        <p class="panelText">
-            I have recreated the layout and game mechanics from scratch, with the intent of giving the user more control
-            over the game, and adding features such as challenge links.
-        </p>
-        <p class="panelText">
-            Also, credit to Ciaran Whitney, who worked on this project with me.
-        </p>
+      <!-- HEADING 2 -->
+      <h2 class="panelHeader">Disclaimer</h2>
+      <hr class="panelHR" />
+      <p class="panelText">
+        I did not invent this game. This site is a clone of the original game,
+        <a
+          class="contentLink"
+          target="_blank"
+          href="https://www.nytimes.com/games/wordle/index.html"
+          >Wordle.</a
+        >
+      </p>
+      <p class="panelText">
+        Also, credit to Ciaran Whitney and Phineas Ziegler for the original
+        repository.
+      </p>
 
-        <!-- LINKS -->
-        <h2 class="panelHeader">Links/Contact</h2>
-        <hr class="panelHR">
+      <!-- LINKS -->
+      <h2 class="panelHeader">Links/Contact</h2>
+      <hr class="panelHR" />
 
-        <!-- repo link -->
-        <p class="panelLink">
-            <i class="fab fa-github"></i> <a href="https://github.com/phinziegler/My-Wordle"
-                target="_blank">Repository</a>
-        </p>
+      <!-- repo link -->
+      <p class="panelLink">
+        <i class="fab fa-github"></i>
+        <a href="https://github.com/chrispan0/custom-wordle" target="_blank"
+          >Repository</a
+        >
+      </p>
 
-        <!-- email link -->
-        <p class="panelLink">
-            <i class="far fa-envelope"></i> <a href="mailto: phinziegler@gmail.com"
-                target="_blank">phinziegler@gmail.com</a>
-        </p>
+      <!-- email link -->
+      <p class="panelLink">
+        <i class="far fa-envelope"></i>
+        <a href="mailto: wordle@chrispanetta.com" target="_blank"
+          >wordle@chrispanetta.com</a
+        >
+      </p>
 
-        <!-- portfolio link -->
-        <p class="panelLink">
-            <i class="fa-solid fa-globe"></i> <a href="https://phinziegler.github.io/Personal-Website/"
-                target="_blank">Website</a>
-        </p>
-        <div id="panelFooter">&copy; Phineas Ziegler, 2022</div>
+      <!-- portfolio link -->
+      <p class="panelLink">
+        <i class="fa-solid fa-globe"></i>
+        <a href="https://chrispanetta.com" target="_blank">Website</a>
+      </p>
+      <div id="panelFooter">&copy; Chris Panetta, 2024</div>
     </div>
 
     <!-- HEADER -->
     <div id="intro">
-        <div id="separator">
-            <a id="stdlink" href=".">
-                <h1>My Wordle</h1>
-            </a>
-        </div>
+      <div id="separator">
+        <a id="stdlink" href=".">
+          <h1>My Wordle</h1>
+        </a>
+      </div>
     </div>
 
     <!-- SIDEPANEL div -->
     <i id="panelToggle" class="fas fa-chevron-right"></i>
-
-</body>
-
+  </body>
 </html>
